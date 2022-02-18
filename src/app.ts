@@ -1,7 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config({
-  path: __dirname + '/./../../.env',
-});
+dotenv.config();
 
 import UtilsENVConfig from './utils/utils-env-config';
 UtilsENVConfig.init();
@@ -48,7 +46,7 @@ export default class App {
     const app = new App();
 
     await app.initRuntimeData();
-    // await app.initDb();
+    await app.initDb();
     app.initMiddlewares();
     app.initControllers();
     app.initErrorHandling();

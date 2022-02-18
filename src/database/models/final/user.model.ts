@@ -56,10 +56,7 @@ export default class User extends Model {
   public role!: string;
 
   @ForeignKey(() => Store)
-  @Column({
-    allowNull: true,
-  })
-  public workStoreId!: Store;
+  public workStoreId!: string;
 
   @BelongsTo(() => Store, 'workStoreId')
   public store!: Store;
