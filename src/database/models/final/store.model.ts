@@ -1,7 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
 import Filial from './filial.model';
 import Rating from './rating.model';
-import StoreType from './store-type.model';
 
 @Table({
   timestamps: true,
@@ -23,12 +22,6 @@ export default class Store extends Model {
       allowNull: false,
   })
   public phone!: string;
-
-  @ForeignKey(() => StoreType)
-  public storeTypeId!: string;
-
-  @BelongsTo(() => StoreType, 'storeTypeId')
-  public storeType!: StoreType;
 
   @HasMany(() => Filial, 'storeId')
   public filialList!: Filial[];
