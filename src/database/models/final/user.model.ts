@@ -21,6 +21,7 @@ export default class User extends Model {
 
   @Column({
     allowNull: false,
+    unique: true,
   })
   public phone!: string;
 
