@@ -20,5 +20,5 @@ export default class UserAddress extends Model {
   @Column({
       defaultValue: false,
   })
-  public count!: boolean;
+  public isFavotite!: boolean;
 }

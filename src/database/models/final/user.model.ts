@@ -35,6 +35,11 @@ export default class User extends Model {
   })
   public lastName!: string;
 
+  @Column({
+    defaultValue: false,
+  })
+  public isBlocked!: boolean;
+
   @HasMany(() => Token, 'userId')
   public tokenList!: Token[];
 
