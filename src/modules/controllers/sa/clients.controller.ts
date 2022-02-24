@@ -38,8 +38,6 @@ class Controller {
   async patchClient(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
   }
-
-  // насчет бана узнать :)
 }
 
 export default new Controller();
