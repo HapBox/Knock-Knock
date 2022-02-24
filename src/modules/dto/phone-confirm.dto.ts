@@ -8,5 +8,6 @@ export class PhoneConfirmDto extends BaseDto {
 
   @IsString()
   @IsNotEmpty()
-  value!: string;
+  value?: string;
+
 }
