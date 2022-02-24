@@ -8,7 +8,7 @@ class Controller {
     summary: 'Получение списка магазинов',
     query: {
       'category?': 'Название категории',
-      'searchValue?': 'название тега',
+      'searchValue?': 'Название тега поиска',
     }
   })
   async getStores(req: BaseRequest, res: Response, next: NextFunction) {
