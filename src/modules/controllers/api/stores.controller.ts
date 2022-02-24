@@ -22,6 +22,13 @@ class Controller {
     res.json({ message: 'ok' });
   }
 
+  @GET('/:id/reviews', {
+    summary: 'Получение всех отзывов на магазин',
+  })
+  async getRating(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
   @GET('/:id/products', {
     summary: 'Получение информации о магазине по id',
     query: {

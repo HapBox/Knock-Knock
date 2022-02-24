@@ -17,6 +17,13 @@ class Controller {
   async updateUser(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
   }
+
+  @GET('/me/reviews', {
+    summary: 'Получение всех отзывов пользователя',
+  })
+  async getRating(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
 }
 
 export default new Controller();
