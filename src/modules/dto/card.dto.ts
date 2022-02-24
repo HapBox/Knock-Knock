@@ -1,9 +1,9 @@
 import { IsDate, IsInt, IsUUID } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
-export class PhoneConfirmDto extends BaseDto {
+export class CardDto extends BaseDto {
   @IsInt()
-  phone!: number;
+  number!: number;
 
   @IsDate()
   date!: Date;

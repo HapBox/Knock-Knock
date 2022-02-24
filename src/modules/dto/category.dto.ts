@@ -1,10 +1,7 @@
 import { IsString } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
-export class ClientDto extends BaseDto {
+export class CategoryDto extends BaseDto {
   @IsString()
-  firstName!: string;
-
-  @IsString()
-  lastName!: string;
+  name!: string;
 }
