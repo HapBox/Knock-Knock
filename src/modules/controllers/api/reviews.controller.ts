@@ -4,13 +4,6 @@ import BaseRequest from '../../base/base.request';
 
 @ApiController('/api/reviews')
 class Controller {
-  @POST('/', {
-    summary: 'Создание отзыва',
-  })
-  async createRating(req: BaseRequest, res: Response, next: NextFunction) {
-    res.json({ message: 'ok' });
-  }
-
   @PATCH('/:id', {
     summary: 'Обновление отзыва',
   })

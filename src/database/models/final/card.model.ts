@@ -29,6 +29,11 @@ export default class Card extends Model {
   })
   public cvv!: number;
 
+  @Column({
+    defaultValue: true
+  })
+  public isExist!: Boolean;
+
   @ForeignKey(() => User)
   public userId!: string;
 

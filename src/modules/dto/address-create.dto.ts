@@ -19,11 +19,9 @@ export class AddressCreateDto extends BaseDto {
   @IsInt()
   entrance!: number;
 
-  @IsNotEmpty()
   @IsInt()
   floor!: number;
 
-  @IsNotEmpty()
   @IsInt()
   apartment!: number;
 

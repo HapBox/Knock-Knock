@@ -16,9 +16,4 @@ export default class UserAddress extends Model {
   @PrimaryKey
   @Column
   public addressId!: string;
-
-  @Column({
-      defaultValue: false,
-  })
-  public isFavotite!: boolean;
 }

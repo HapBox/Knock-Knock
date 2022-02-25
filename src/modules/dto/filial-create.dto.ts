@@ -1,10 +1,13 @@
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmptyObject, ValidateNested } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
+import { AddressCreateDto } from './address-create.dto';
 
 export class FilialCreateDto extends BaseDto {
   storeId!: string;
 
-  @IsUUID(4)
-  @IsNotEmpty()
-  addressId!: string;
+  @ValidateNested()
+  @IsNotEmptyObject()
+  @Type(() => AddressCreateDto)
+  address!: AddressCreateDto;
 }

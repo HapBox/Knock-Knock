@@ -1,19 +1,19 @@
-import { IsString, IsInt, IsBoolean } from 'class-validator';
+import { IsString, IsInt, IsBoolean, IsNotEmpty } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class AddressUpdateDto extends BaseDto {
   userId!: string; //если пользователь хочет изменить свой адрес
   addressId!: string;
 
-  @IsBoolean()
-  isFavorite!: Boolean; //если пользователь хочет адрес избранным
-
+  @IsNotEmpty()
   @IsString()
   city!: string;
 
+  @IsNotEmpty()
   @IsString()
   street!: string;
 
+  @IsNotEmpty()
   @IsString()
   house!: string;
 

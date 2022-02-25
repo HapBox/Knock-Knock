@@ -24,6 +24,27 @@ class Controller {
   async getRating(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
   }
+
+  @POST('/me/addresses', {
+    summary: 'Создание нового адреса пользователя',
+  })
+  async createAddress(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
+  @GET('/me/addresses', {
+    summary: 'Получение списка адресов пользователя',
+  })
+  async getAddresses(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
+  @PATCH('/me/addresses/:id', {
+    summary: 'Обновление информации об адресе',
+  })
+  async updateAddress(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
 }
 
 export default new Controller();

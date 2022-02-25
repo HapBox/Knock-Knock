@@ -25,10 +25,24 @@ class Controller {
     res.json({ message: 'ok' });
   }
 
+  @PATCH('/:orderId/addresses/:addressId', {
+    summary: 'Изменение адреса в доставке',
+  })
+  async changeOrderAddress(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
   @PATCH('/:id/cancel', {
     summary: 'Отмена заказа',
   })
   async cancelOrder(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
+  @POST('/:id/reviews', {
+    summary: 'Создание отзыва',
+  })
+  async createRating(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
   }
 }

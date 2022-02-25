@@ -59,6 +59,20 @@ class Controller {
   async deleteStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
   }
+
+  @PATCH('/:id/workers/add', {
+    summary: 'Добавление администратора магазина',
+  })
+  async addWorker(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
+  @PATCH('/:storeId/workers/:workerId/remove', {
+    summary: 'Удаление администратора магазина',
+  })
+  async removeWorker(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
 }
 
 export default new Controller();

@@ -16,7 +16,7 @@ export default class Promotion extends Model {
     type: DataType.SMALLINT,
     allowNull: false,
   })
-  public discountProcent!: number;
+  public discountPercent!: number;
 
   @Column({
     allowNull: false,
