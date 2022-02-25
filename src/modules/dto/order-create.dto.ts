@@ -1,6 +1,8 @@
-import { IsEnum, IsUUID, IsDate, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEnum, IsUUID, IsDate, IsNotEmpty, ValidateNested } from 'class-validator';
 import { PaymentTypes } from '../../utils/constants';
 import { BaseDto } from '../base/base.dto';
+import { OrderProductDto } from './order-product.dto';
 
 export class OrderCreateDto extends BaseDto {
   @IsNotEmpty()
@@ -22,5 +24,8 @@ export class OrderCreateDto extends BaseDto {
   @IsDate() //может быть прямо сейчас
   dateTo!: Date;
 
-  //а что с продуктами делать??
+  @ValidateNested() //список продуктов в заказе
+  @IsNotEmpty()
+  @Type(() => OrderProductDto)
+  products!: Array<OrderProductDto>;
 }
