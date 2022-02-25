@@ -1,7 +1,10 @@
 import { IsInt, IsString, IsUUID } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
-export class ProductDto extends BaseDto {
+export class ProductUpdateDto extends BaseDto {
+  productId!: string;
+  filialId!: string; //скорее всего не надо
+
   @IsString()
   name!: string;
 
@@ -13,4 +16,6 @@ export class ProductDto extends BaseDto {
 
   @IsUUID(4)
   categoryId!: string;
+
+  //фото....
 }

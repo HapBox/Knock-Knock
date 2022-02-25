@@ -1,7 +1,9 @@
 import { IsInt, IsString } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
-export class RatingDto extends BaseDto {
+export class RatingUpdateDto extends BaseDto {
+  ratingId!: string;
+
   @IsInt()
   rating!: number;
 

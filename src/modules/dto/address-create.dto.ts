@@ -1,24 +1,29 @@
 //ждем помощи от господа бога
 
-import { IsString, IsInt } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
-export class AddressDto extends BaseDto {
+export class AddressCreateDto extends BaseDto {
+  @IsNotEmpty()
   @IsString()
   city!: string;
 
+  @IsNotEmpty()
   @IsString()
   street!: string;
 
+  @IsNotEmpty()
   @IsString()
-  hous!: string;
+  house!: string;
 
   @IsInt()
   entrance!: number;
 
+  @IsNotEmpty()
   @IsInt()
   floor!: number;
 
+  @IsNotEmpty()
   @IsInt()
   apartment!: number;
 

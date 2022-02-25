@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
-export class StoreDto extends BaseDto {
+export class StoreCreateDto extends BaseDto {
   @IsString()
   @IsNotEmpty()
   name!: string;
@@ -9,4 +9,6 @@ export class StoreDto extends BaseDto {
   @IsString()
   @IsNotEmpty()
   phone!: string;
+
+  //Фото продумать....
 }
