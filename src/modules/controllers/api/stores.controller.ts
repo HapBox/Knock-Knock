@@ -22,6 +22,20 @@ class Controller {
     res.json({ message: 'ok' });
   }
 
+  @GET('/:id/filials', {
+    summary: 'Получение списка филиалов в городе',
+  })
+  async getStoreFilialList(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
+  @GET('/:storeId/filials/:filialId', {
+    summary: 'Получение информации о филиале',
+  })
+  async getStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
+    res.json({ message: 'ok' });
+  }
+
   @GET('/:id/reviews', {
     summary: 'Получение всех отзывов на магазин',
   })

@@ -33,7 +33,7 @@ class Controller {
   }
 
   @DELETE('/', { //скорее всего не нужно :)
-    summary: 'Создание адреса для магазина',
+    summary: 'Удаление адреса магазина',
   })
   async deleteAddress(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });

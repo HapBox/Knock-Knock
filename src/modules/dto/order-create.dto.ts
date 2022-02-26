@@ -22,7 +22,6 @@ export class OrderCreateDto extends BaseDto {
   payment!: string;
 
   @IsUUID(4)
-  @IsNotEmpty()
   cardId!: string;
 
   @IsDate() //может быть прямо сейчас

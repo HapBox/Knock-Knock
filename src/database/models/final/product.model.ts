@@ -43,7 +43,7 @@ export default class Product extends Model {
   public category!: Category;
 
   @ForeignKey(() => Promotion)
-  public promotionId!: Promotion;
+  public promotionId!: string;
 
   @BelongsTo(() => Promotion, 'promotionId')
   public promotion!: Promotion;
