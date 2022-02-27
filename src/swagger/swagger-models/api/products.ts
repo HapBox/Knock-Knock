@@ -1,4 +1,4 @@
-import APICategories from './categories';
+import APICategoriesModels from './categories';
 
 export default class APIProductsModels {
   static resPromotionInfo = {
@@ -10,12 +10,11 @@ export default class APIProductsModels {
   static resProductInfo = {
     id: 'UUID',
     name: 'Название продукта',
-    phone: 'Телефон горячей линии магазина',
     description: 'Описание продукта',
     price: 123,
     promotion: APIProductsModels.resPromotionInfo,
     promotionId: 'UUID',
-    category: APICategories.resCategoryInfo,
+    category: APICategoriesModels.resCategoryInfo,
     categoryId: 'UUID',
     //image
   };

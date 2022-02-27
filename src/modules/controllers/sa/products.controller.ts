@@ -44,20 +44,18 @@ class Controller {
     res.json({ message: 'ok' });
   }
 
-  @POST("/:id/promotion",{
-    summary: "Добавление акции",
+  @POST('/:id/promotion', {
+    summary: 'Добавление акции',
   })
   async createPromotion(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
   }
 
-  @DELETE("/:id/promotion",{
-    summary: "Добавление акции",
+  @DELETE('/:id/promotion', {
+    summary: 'Удаление акции',
   })
   async deletePromotion(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
   }
-
 }
-
 export default new Controller();

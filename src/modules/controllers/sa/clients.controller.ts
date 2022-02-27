@@ -12,7 +12,7 @@ class Controller {
   }
 
   @GET('/:id', {
-    summary: 'Получение списка всех клиентов',
+    summary: 'Получение информации о клиенте по id',
   })
   async getClientById(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });

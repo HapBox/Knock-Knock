@@ -60,7 +60,7 @@ class Controller {
     res.json({ message: 'ok' });
   }
 
-  @PATCH('/:id/workers/add', {
+  @PATCH('/:storeId/workers/:workerId/add', {
     summary: 'Добавление администратора магазина',
   })
   async addWorker(req: BaseRequest, res: Response, next: NextFunction) {

@@ -2,6 +2,8 @@ import { IsInt, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class ProductCreateDto extends BaseDto {
+  @IsNotEmpty()
+  @IsUUID(4)
   filialId!: string;
 
   @IsNotEmpty()

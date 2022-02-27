@@ -3,7 +3,12 @@ import APIAddressesModels from "./addresses";
 import APIStoresModels from "./stores";
 
 export default class APIOrderModels {
-  static reqProductOrderInfo = {
+  static reqProductOrderCreate = {
+    productId: 'UUID',
+    count: 3,
+  };
+
+  static resProductOrderCreate = {
     productId: 'UUID',
     count: 3,
   };
@@ -12,9 +17,9 @@ export default class APIOrderModels {
     filialId: 'UUID',
     userAddress: APIAddressesModels.reqAddressCreate,
     payment: Object.values(PaymentTypes),
-    cardId: 'id карты',
+    'cardId?': 'UUID',
     dateTo: '27.02.2022',
-    productList: [APIOrderModels.reqProductOrderInfo],
+    productList: [APIOrderModels.reqProductOrderCreate],
   };
 
   static resOrderInfo = {
@@ -23,7 +28,7 @@ export default class APIOrderModels {
     price: 'Цена',
     status: 'Статус',
     dateTo: 'На какое время заказ',
-    productList: [APIOrderModels.reqProductOrderInfo],
+    productList: [APIOrderModels.resProductOrderCreate],
     address: APIAddressesModels.resAddressInfo
   };
 
