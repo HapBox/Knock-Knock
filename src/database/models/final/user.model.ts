@@ -26,12 +26,12 @@ export default class User extends Model {
   public phone!: string;
 
   @Column({
-    allowNull: false,
+    type: DataType.STRING,
   })
   public firstName!: string;
 
   @Column({
-    allowNull: false,
+    type: DataType.STRING,
   })
   public lastName!: string;
 
