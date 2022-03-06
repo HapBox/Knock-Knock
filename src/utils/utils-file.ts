@@ -4,7 +4,7 @@ import { Constants, FileTypes } from './constants';
 import fs from 'fs';
 import { glob } from 'glob';
 import UtilsENVConfig from './utils-env-config';
-import FileDB from '../database/models/final/file-db';
+import FileDB from '../database/models/final/file-db.model';
 
 interface FileData {
   id: string; //id - сгенеренный, в момент сохранения файда

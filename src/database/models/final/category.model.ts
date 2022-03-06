@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
-import FileDB from './file-db';
+import FileDB from './file-db.model';
 import Product from './product.model';
 
 @Table({

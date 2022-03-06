@@ -1,5 +1,5 @@
 import { UploadedFile } from 'express-fileupload';
-import FileDB from '../../../database/models/final/file-db';
+import FileDB from '../../../database/models/final/file-db.model';
 import { saveFileIntoDB } from '../../../utils/utils-file';
 
 export default class SAMediaService {

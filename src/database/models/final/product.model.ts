@@ -1,7 +1,7 @@
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
 import OrderProduct from '../relations/order-product.model';
 import Category from './category.model';
-import FileDB from './file-db';
+import FileDB from './file-db.model';
 import Filial from './filial.model';
 import Order from './order.model';
 import Promotion from './promotion.model';
