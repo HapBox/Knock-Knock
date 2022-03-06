@@ -1,4 +1,5 @@
-import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
+import FileDB from './file-db';
 import Product from './product.model';
 
 @Table({
@@ -17,10 +18,11 @@ export default class Category extends Model {
   })
   public name!: string;
 
-  @Column({
-    allowNull: false,
-  })
-  public image!: string; //продумать image
+  @ForeignKey(() => FileDB)
+  public imageId!: string;
+
+  @BelongsTo(() => FileDB, 'imageId')
+  public image!: FileDB;
 
   @HasMany(() => Product, 'categoryId')
   public productList!: Product[];

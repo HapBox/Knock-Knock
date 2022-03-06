@@ -1,6 +1,7 @@
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
 import OrderProduct from '../relations/order-product.model';
 import Category from './category.model';
+import FileDB from './file-db';
 import Filial from './filial.model';
 import Order from './order.model';
 import Promotion from './promotion.model';
@@ -31,10 +32,11 @@ export default class Product extends Model {
   })
   public price!: number;
 
-  @Column({
-      allowNull: false
-  })
-  public image!: string; //продумать image
+  @ForeignKey(() => FileDB)
+  public imageId!: string;
+
+  @BelongsTo(() => FileDB, 'imageId')
+  public image!: FileDB;
 
   @ForeignKey(() => Category)
   public categoryId!: string;

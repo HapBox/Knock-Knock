@@ -1,4 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
+import FileDB from './file-db';
 import Filial from './filial.model';
 import Rating from './rating.model';
 
@@ -22,6 +23,12 @@ export default class Store extends Model {
       allowNull: false,
   })
   public phone!: string;
+
+  @ForeignKey(() => FileDB)
+  public imageId!: string;
+
+  @BelongsTo(() => FileDB, 'imageId')
+  public image!: FileDB;
 
   @HasMany(() => Filial, 'storeId')
   public filialList!: Filial[];
