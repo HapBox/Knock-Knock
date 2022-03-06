@@ -4,6 +4,7 @@ import { Constants, FileTypes } from './constants';
 import fs from 'fs';
 import { glob } from 'glob';
 import UtilsENVConfig from './utils-env-config';
+import FileDB from '../database/models/final/file-db';
 
 interface FileData {
   id: string; //id - сгенеренный, в момент сохранения файда
@@ -31,6 +32,15 @@ export async function saveFile(file?: UploadedFile): Promise<FileData | undefine
   await file.mv(`${dirPath}/${fileData.id}.${fileData.extension}`);
 
   return fileData;
+}
+
+
+//Сохранение файла в папку на сервере + создание в БД объекта
+export async function saveFileIntoDB(file?: UploadedFile): Promise<FileDB | undefined> {
+  if (!file) return undefined;
+  const fileData = (await saveFile(file))!;
+
+  return await FileDB.create(fileData as any);
 }
 
 //Удаление файла
