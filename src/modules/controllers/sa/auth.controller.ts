@@ -18,13 +18,6 @@ class Controller {
     res.json({ message: 'ok' });
   }
 
-  @GET('/token/check', {
-    summary: 'Проверка токена на валидность',
-  })
-  async tokenCheck(req: BaseRequest, res: Response, next: NextFunction) {
-    res.json({ message: 'ok' });
-  }
-
   @GET('/logout', {
     summary: 'Выход из аккаунта',
   })
