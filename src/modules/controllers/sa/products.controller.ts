@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import { ApiController, DELETE, GET, PATCH, POST } from '../../../core/api-decorators';
 import BaseRequest from '../../base/base.request';
 
+//перекинуть в store
 @ApiController('/api/products')
 class Controller {
   @GET('/', {

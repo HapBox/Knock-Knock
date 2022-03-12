@@ -40,7 +40,7 @@ export default class AuthService {
 
     if (!smsConfirm) {
       throwError({
-        statusCode: 401,
+        statusCode: 400,
         message: 'Wrong data.',
       });
     }

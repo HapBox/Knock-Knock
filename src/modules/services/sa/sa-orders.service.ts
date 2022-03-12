@@ -35,14 +35,14 @@ export default class SaOrdersService {
         message: 'Not found',
       });
 
-    if (order.status == StatusTypes.PREPARING)
+    if (order.status === StatusTypes.PREPARING)
       throwError({
         statusCode: 400,
         message: 'Order already preparing',
       });
 
     order.status = StatusTypes.PREPARING;
-    await order.save();
+    await order.save(); //update
 
     return order;
   }
@@ -56,14 +56,14 @@ export default class SaOrdersService {
         message: 'Not found',
       });
 
-    if (order.status == StatusTypes.CANCELED)
+    if (order.status === StatusTypes.CANCELED)
       throwError({
         statusCode: 400,
         message: 'Order already canceled',
       });
 
     order.status = StatusTypes.CANCELED;
-    await order.save();
+    await order.save(); //update
 
     return order;
   }
@@ -77,14 +77,14 @@ export default class SaOrdersService {
         message: 'Not found',
       });
 
-    if (order.status == StatusTypes.DELIVERING)
+    if (order.status === StatusTypes.DELIVERING)
       throwError({
         statusCode: 400,
         message: 'Order already delivering',
       });
 
     order.status = StatusTypes.DELIVERING;
-    await order.save();
+    await order.save(); //update
 
     return order;
   }
@@ -98,14 +98,14 @@ export default class SaOrdersService {
         message: 'Not found',
       });
 
-    if (order.status == StatusTypes.READY)
+    if (order.status === StatusTypes.READY)
       throwError({
         statusCode: 400,
         message: 'Order already done',
       });
 
     order.status = StatusTypes.READY;
-    await order.save();
+    await order.save(); //update
 
     return order;
   }

@@ -37,12 +37,12 @@ export default class SaClientsService {
 
     if (client.isBlocked == true)
       throwError({
-        statusCode: 401,
+        statusCode: 400,
         message: 'Client already blocked',
       });
 
     client.isBlocked = true;
-    await client.save();
+    await client.save(); //update
 
     return client;
   }
@@ -58,12 +58,12 @@ export default class SaClientsService {
 
     if (client.isBlocked == false)
       throwError({
-        statusCode: 401,
+        statusCode: 400,
         message: 'Client is not blocked',
       });
 
     client.isBlocked = false;
-    await client.save();
+    await client.save(); //update
 
     return client;
   }
@@ -78,7 +78,7 @@ export default class SaClientsService {
       });
 
       client.set(dto);
-      await client.save();
+      await client.save(); //update
 
       return client;
   }

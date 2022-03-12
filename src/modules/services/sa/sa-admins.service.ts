@@ -1,4 +1,3 @@
-import { and, Op } from 'sequelize/types';
 import User from '../../../database/models/final/user.model';
 import { RoleTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
@@ -19,7 +18,7 @@ export default class SaAdminsService {
   static async getAdminById(adminId: string) {
     let admin = await User.findByPk(adminId);
 
-    if (!admin || admin.role != RoleTypes.ADMIN)
+    if (!admin || admin.role != RoleTypes.ADMIN) //поменять
       throwError({
         statusCode: 404,
         message: 'Not found',
@@ -31,13 +30,13 @@ export default class SaAdminsService {
   static async updateAdmin(adminId: string, dto: UserUpdateDto) {
     let admin = await User.findByPk(adminId);
 
-    if (!admin || admin.role != RoleTypes.ADMIN)
+    if (!admin || admin.role != RoleTypes.ADMIN) //поменять
       throwError({
         statusCode: 404,
         message: 'Not found',
       });
 
-    admin.set(dto);
+    admin.set(dto); //update
     await admin.save();
     
     return admin;
@@ -46,7 +45,7 @@ export default class SaAdminsService {
   static async blockAdmin(adminId: string) {
     let admin = await User.findByPk(adminId);
 
-    if (!admin || admin.role != RoleTypes.ADMIN)
+    if (!admin || admin.role != RoleTypes.ADMIN) //поменять
       throwError({
         statusCode: 404,
         message: 'Not found',
@@ -59,7 +58,7 @@ export default class SaAdminsService {
       });
 
     admin.isBlocked = true;
-    await admin.save();
+    await admin.save();//update
 
     return admin;
   }
@@ -80,7 +79,7 @@ export default class SaAdminsService {
       });
 
     admin.isBlocked = false;
-    await admin.save();
+    await admin.save();//update
 
     return admin;
   }
@@ -97,7 +96,7 @@ export default class SaAdminsService {
         statusCode: 400,
         message: 'Phone already registered',
       });
-    admin = await User.create(dto);
+    admin = await User.create(dto);//проверить
 
     return admin;
   }
@@ -113,7 +112,7 @@ export default class SaAdminsService {
 
     admin.role = RoleTypes.USER;
     admin.workStoreId = '';
-    await admin.save();
+    await admin.save();//update
 
     return admin;
   }

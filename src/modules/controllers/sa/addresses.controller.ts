@@ -7,27 +7,9 @@ import { AddressCreateDto } from '../../dto/address-create.dto';
 import { AddressUpdateDto } from '../../dto/address-update.dto';
 import SaAddressesService from '../../services/sa/sa-addresses.service';
 
+//сделать так для филиалов
 @ApiController('/sa/api/addresses')
 class Controller {
-  @GET('/', {
-    summary: 'Получение списка адресов',
-    handlers: [requireToken],
-  })
-  async getAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    let addressList = await SaAddressesService.getAddresses();
-    res.json(addressList);
-  }
-
-  @GET('/:id', {
-    summary: 'Получение адреса по id',
-    handlers: [requireToken],
-  })
-  async getAddresById(req: BaseRequest, res: Response, next: NextFunction) {
-    let addressId: string = req.params.id;
-    let address = await SaAddressesService.getAddressById(addressId);
-    res.json(address);
-  }
-
   @POST('/', {
     summary: 'Создание адреса для магазина',
     handlers: [requireToken, dtoValidator(AddressCreateDto)],
