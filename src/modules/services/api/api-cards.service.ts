@@ -32,6 +32,6 @@ export default class ApiCardsService {
         message: 'Not found.',
       });
     }
-    card.update({isExist: false});
+    return await card.update({isExist: false});
   }
 }

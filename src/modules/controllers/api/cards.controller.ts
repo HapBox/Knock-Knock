@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { ApiController, DELETE, GET, PATCH, POST } from '../../../core/api-decorators';
+import { ApiController, DELETE, GET, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import BaseRequest from '../../base/base.request';
