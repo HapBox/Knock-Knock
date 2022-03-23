@@ -53,7 +53,7 @@ export default class SaProductsService {
     let productList = await Product.findAll({
       where: {
         name: {
-          [Op.like]: '%' + searchValue + '%',
+          [Op.iLike]: '%' + searchValue + '%',
         },
       },
       include: [
