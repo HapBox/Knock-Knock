@@ -9,17 +9,18 @@ export default class SaAddressesService {
     return address;
   }
 
-  static async patchAddress(addressId: string, dto: AddressUpdateDto) {
-    let address = await Address.findByPk(addressId);
+  static async patchAddress(dto: AddressUpdateDto) {
+    let address = await Address.findByPk(dto.addressId);
 
     if (!address)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Address not found',
       });
 
-    address.set(dto);
-    await address.save();
+    await address.update({
+      ...dto,
+    });
     return address;
   }
 
@@ -29,7 +30,7 @@ export default class SaAddressesService {
     if (!address)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Address not found',
       });
 
     await address.destroy();

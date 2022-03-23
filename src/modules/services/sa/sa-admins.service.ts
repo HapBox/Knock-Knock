@@ -16,39 +16,55 @@ export default class SaAdminsService {
   }
 
   static async getAdminById(adminId: string) {
-    let admin = await User.findByPk(adminId);
+    let admin = await User.findOne({
+      where: {
+        id: adminId,
+        role: RoleTypes.ADMIN,
+      },
+    });
 
-    if (!admin || admin.role != RoleTypes.ADMIN) //поменять
+    if (!admin)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Admin not found',
       });
 
     return admin;
   }
 
-  static async updateAdmin(adminId: string, dto: UserUpdateDto) {
-    let admin = await User.findByPk(adminId);
+  static async updateAdmin(dto: UserUpdateDto) {
+    let admin = await User.findOne({
+      where: {
+        id: dto.userId,
+        role: RoleTypes.ADMIN,
+      },
+    });
 
-    if (!admin || admin.role != RoleTypes.ADMIN) //поменять
+    if (!admin)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Admin not found',
       });
 
-    admin.set(dto); //update
-    await admin.save();
-    
+    await admin.update({
+      ...dto,
+    });
+
     return admin;
   }
 
   static async blockAdmin(adminId: string) {
-    let admin = await User.findByPk(adminId);
+    let admin = await User.findOne({
+      where: {
+        id: adminId,
+        role: RoleTypes.ADMIN,
+      },
+    });
 
-    if (!admin || admin.role != RoleTypes.ADMIN) //поменять
+    if (!admin)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Admin not found',
       });
 
     if (admin.isBlocked == true)
@@ -57,19 +73,25 @@ export default class SaAdminsService {
         message: 'Admin already blocked',
       });
 
-    admin.isBlocked = true;
-    await admin.save();//update
+    await admin.update({
+      isBlocked: true,
+    });
 
     return admin;
   }
 
   static async unblockAdmin(adminId: string) {
-    let admin = await User.findByPk(adminId);
+    let admin = await User.findOne({
+      where: {
+        id: adminId,
+        role: RoleTypes.ADMIN,
+      },
+    });
 
-    if (!admin || admin.role != RoleTypes.ADMIN)
+    if (!admin)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Admin not found',
       });
 
     if (admin.isBlocked == false)
@@ -78,8 +100,9 @@ export default class SaAdminsService {
         message: 'Admin is not blocked',
       });
 
-    admin.isBlocked = false;
-    await admin.save();//update
+    await admin.update({
+      isBlocked: false,
+    });
 
     return admin;
   }
@@ -96,23 +119,31 @@ export default class SaAdminsService {
         statusCode: 400,
         message: 'Phone already registered',
       });
-    admin = await User.create(dto);//проверить
+    admin = await User.create({
+      ...dto,
+    });
 
     return admin;
   }
 
   static async dismissAdmin(adminId: string) {
-    let admin = await User.findByPk(adminId);
+    let admin = await User.findOne({
+      where: {
+        id: adminId,
+        role: RoleTypes.ADMIN,
+      },
+    });
 
-    if (!admin || admin.role != RoleTypes.ADMIN)
+    if (!admin)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Admin not found',
       });
 
-    admin.role = RoleTypes.USER;
-    admin.workStoreId = '';
-    await admin.save();//update
+    await admin.update({
+      role: RoleTypes.USER,
+      workStoreId: '',
+    });
 
     return admin;
   }

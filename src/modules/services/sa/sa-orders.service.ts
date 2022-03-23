@@ -20,7 +20,7 @@ export default class SaOrdersService {
     if (!order)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Order not found',
       });
 
     return order;
@@ -32,7 +32,7 @@ export default class SaOrdersService {
     if (!order)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Order not found',
       });
 
     if (order.status === StatusTypes.PREPARING)
@@ -41,8 +41,9 @@ export default class SaOrdersService {
         message: 'Order already preparing',
       });
 
-    order.status = StatusTypes.PREPARING;
-    await order.save(); //update
+    await order.update({
+      status: StatusTypes.PREPARING,
+    });
 
     return order;
   }
@@ -53,7 +54,7 @@ export default class SaOrdersService {
     if (!order)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Order not found',
       });
 
     if (order.status === StatusTypes.CANCELED)
@@ -62,8 +63,9 @@ export default class SaOrdersService {
         message: 'Order already canceled',
       });
 
-    order.status = StatusTypes.CANCELED;
-    await order.save(); //update
+    await order.update({
+      status: StatusTypes.CANCELED,
+    });
 
     return order;
   }
@@ -74,7 +76,7 @@ export default class SaOrdersService {
     if (!order)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Order not found',
       });
 
     if (order.status === StatusTypes.DELIVERING)
@@ -83,8 +85,9 @@ export default class SaOrdersService {
         message: 'Order already delivering',
       });
 
-    order.status = StatusTypes.DELIVERING;
-    await order.save(); //update
+    await order.update({
+      status: StatusTypes.DELIVERING,
+    });
 
     return order;
   }
@@ -95,7 +98,7 @@ export default class SaOrdersService {
     if (!order)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Order not found',
       });
 
     if (order.status === StatusTypes.READY)
@@ -104,14 +107,17 @@ export default class SaOrdersService {
         message: 'Order already done',
       });
 
-    order.status = StatusTypes.READY;
-    await order.save(); //update
+    await order.update({
+      status: StatusTypes.READY,
+    });
 
     return order;
   }
 
   static async createPhoneOrder(dto: OrderCreateDto) {
-    let order = await Order.create(dto);
+    let order = await Order.create({
+      ...dto,
+    });
     return order;
   }
 }

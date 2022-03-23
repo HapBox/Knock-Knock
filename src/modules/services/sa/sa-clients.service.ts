@@ -20,19 +20,24 @@ export default class SaClientsService {
     if (!client)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Client not found',
       });
 
     return client;
   }
 
   static async blockCLient(clientId: string) {
-    let client = await User.findByPk(clientId);
+    let client = await User.findOne({
+      where: {
+        id: clientId,
+        role: RoleTypes.USER,
+      },
+    });
 
-    if (!client || client.role != RoleTypes.USER)
+    if (!client)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Client not found',
       });
 
     if (client.isBlocked == true)
@@ -41,19 +46,25 @@ export default class SaClientsService {
         message: 'Client already blocked',
       });
 
-    client.isBlocked = true;
-    await client.save(); //update
+    await client.update({
+      isBlocked: true,
+    });
 
     return client;
   }
 
   static async unblockClient(clientId: string) {
-    let client = await User.findByPk(clientId);
+    let client = await User.findOne({
+      where: {
+        id: clientId,
+        role: RoleTypes.USER,
+      },
+    });
 
-    if (!client || client.role != RoleTypes.USER)
+    if (!client)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Client not found',
       });
 
     if (client.isBlocked == false)
@@ -62,26 +73,31 @@ export default class SaClientsService {
         message: 'Client is not blocked',
       });
 
-    client.isBlocked = false;
-    await client.save(); //update
+    await client.update({
+      isBlocked: false,
+    });
 
     return client;
   }
 
-  static async updateClient(clientId: string, dto: UserUpdateDto){
-    let client = await User.findByPk(clientId);
+  static async updateClient(dto: UserUpdateDto) {
+    let client = await User.findOne({
+      where: {
+        id: dto.userId,
+        role: RoleTypes.USER,
+      },
+    });
 
-    if (!client || client.role != RoleTypes.USER)
+    if (!client)
       throwError({
         statusCode: 404,
-        message: 'Not found',
+        message: 'Client not found',
       });
 
-      client.set(dto);
-      await client.save(); //update
+    await client.update({
+      ...dto,
+    });
 
-      return client;
+    return client;
   }
-
-
 }

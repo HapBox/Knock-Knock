@@ -33,9 +33,11 @@ class Controller {
     handlers: [requireToken, dtoValidator(UserUpdateDto)],
   })
   async patchAdmin(req: BaseRequest, res: Response, next: NextFunction) {
-    let adminId: string = req.params.id;
-    let dto = req.body;
-    let admin = await SaAdminsService.updateAdmin(adminId, dto);
+    let dto = {
+      ...req.body,
+      adminId: req.params.id,
+    };
+    let admin = await SaAdminsService.updateAdmin(dto);
     res.json(admin);
   }
 

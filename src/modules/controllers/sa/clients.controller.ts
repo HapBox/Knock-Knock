@@ -1,7 +1,9 @@
 import { NextFunction, Response } from 'express';
 import { ApiController, GET, PATCH, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
+import { dtoValidator } from '../../../middlewares/validate';
 import BaseRequest from '../../base/base.request';
+import { UserUpdateDto } from '../../dto/user-update.dto';
 import SaClientsService from '../../services/sa/sa-clients.service';
 
 @ApiController('/sa/api/clients')
@@ -47,12 +49,11 @@ class Controller {
 
   @PATCH('/:id', {
     summary: 'Обновление информации о клиенте по id',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(UserUpdateDto)],
   })
   async patchClient(req: BaseRequest, res: Response, next: NextFunction) {
-    let clientId: string = req.params.id;
-    let dto = req.body;
-    let client = await SaClientsService.updateClient(clientId, dto);
+    let dto = {...req.body, clientId: req.params.id};
+    let client = await SaClientsService.updateClient(dto);
     res.json(client);
   }
 }

@@ -25,9 +25,8 @@ class Controller {
     handlers: [requireToken, dtoValidator(AddressUpdateDto)],
   })
   async patchAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = req.body;
-    let addressId: string = req.params.id;
-    let address = await SaAddressesService.patchAddress(addressId, dto);
+    let dto = {...req.body, addressId: req.params.id } ;
+    let address = await SaAddressesService.patchAddress(dto);
     res.json(address);
   }
 
