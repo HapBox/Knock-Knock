@@ -75,7 +75,7 @@ class Controller {
     responses: [SwaggerUtils.body200(SAFilialModels.resFilialShortInfo)],
   })
   async createStoreFilials(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = { ...req.body, storeId: req.params.id };
+    let dto: FilialCreateDto = { ...req.body, storeId: req.params.id };
     let filial = await SaStoresService.createStoreFilial(dto);
     res.json(filial);
   }
@@ -90,8 +90,8 @@ class Controller {
     let storeId = req.params.id;
     let filialId = req.params.filialId;
     let dto = req.body;
-    let filial = await SaStoresService.updateStoreFilial(storeId, filialId, dto);
-    res.json({ message: 'ok' });
+    let filial = await SaStoresService.updateStoreFilial(storeId, filialId, dto);// переделать с дто
+    res.json(filial);
   }
 
   @DELETE('/:storeId/filials/:filialId', {
@@ -125,7 +125,7 @@ class Controller {
     let storeId = req.params.id;
     let workerId = req.params.workerId;
     await SaStoresService.removeWorker(storeId, workerId);
-    res.json({ message: 'Worker deleted' });
+    res.json({ message: 'Worker deleted' }); // перекинуть в сервис
   }
 }
 
