@@ -1,4 +1,4 @@
-import { Op } from 'sequelize/types';
+import { Op } from 'sequelize';
 import Category from '../../../database/models/final/category.model';
 import Product from '../../../database/models/final/product.model';
 import Promotion from '../../../database/models/final/promotion.model';
