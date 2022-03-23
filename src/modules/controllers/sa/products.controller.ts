@@ -2,7 +2,9 @@ import { NextFunction, Response } from 'express';
 import { ApiController, DELETE, GET, PATCH, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
-import { throwError } from '../../../utils/http-exception';
+import SAProductsModels from '../../../swagger/swagger-models/sa/products';
+import SAPromotionModels from '../../../swagger/swagger-models/sa/promotions';
+import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
 import { ProductCreateDto } from '../../dto/product-create.dto';
 import { ProductUpdateDto } from '../../dto/product-update.dto';
@@ -20,6 +22,7 @@ class Controller {
       'searchValue?': 'Название тега поиска',
       'filialId?': 'ID филиала',
     },
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfoList)],
   })
   async getProducts(req: BaseRequest, res: Response, next: NextFunction) {
     let productList;
@@ -33,10 +36,7 @@ class Controller {
     } else if (filialId) {
       productList = await SaProductsService.getProductsByFilialId(String(filialId));
     } else {
-      throwError({
-        statusCode: 400,
-        message: 'No search parameters',
-      });
+      productList = await SaProductsService.getProducts();
     }
 
     res.json(productList);
@@ -45,6 +45,7 @@ class Controller {
   @GET('/:id', {
     summary: 'Получение продукта',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
   })
   async getProduct(req: BaseRequest, res: Response, next: NextFunction) {
     let productId = req.params.id;
@@ -55,6 +56,8 @@ class Controller {
   @POST('/', {
     summary: 'Добавление продукта',
     handlers: [requireToken, dtoValidator(ProductCreateDto)],
+    body: SAProductsModels.reqProductCreate,
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
   })
   async createProduct(req: BaseRequest, res: Response, next: NextFunction) {
     let dto = req.body;
@@ -65,6 +68,8 @@ class Controller {
   @PATCH('/:id', {
     summary: 'Обновление продукта',
     handlers: [requireToken, dtoValidator(ProductUpdateDto)],
+    body: SAProductsModels.reqProductCreate,
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
   })
   async updateProduct(req: BaseRequest, res: Response, next: NextFunction) {
     let dto = { ...req.body, productId: req.params.id };
@@ -85,6 +90,8 @@ class Controller {
   @POST('/:id/promotion', {
     summary: 'Добавление акции',
     handlers: [requireToken, dtoValidator(PromotionCreateDto)],
+    body: SAPromotionModels.reqPromotionInfo,
+    responses: [SwaggerUtils.body200(SAPromotionModels.resPromotionInfo)],
   })
   async createPromotion(req: BaseRequest, res: Response, next: NextFunction) {
     let dto = { ...req.body, productId: req.params.id };

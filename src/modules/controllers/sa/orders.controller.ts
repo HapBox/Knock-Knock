@@ -2,6 +2,8 @@ import { NextFunction, Response } from 'express';
 import { ApiController, GET, PATCH, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
+import SAOrderModels from '../../../swagger/swagger-models/sa/orders';
+import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
 import { OrderCreateDto } from '../../dto/order-create.dto';
 import SaOrdersService from '../../services/sa/sa-orders.service';
@@ -14,6 +16,7 @@ class Controller {
       'userId?': 'id клиента',
     },
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrdersInfo)],
   })
   async getOrders(req: BaseRequest, res: Response, next: NextFunction) {
     let userId: string = String(req.query.userId);
@@ -24,6 +27,7 @@ class Controller {
   @GET('/:id', {
     summary: 'Получение заказа по id',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async getOrderById(req: BaseRequest, res: Response, next: NextFunction) {
     let orderId: string = req.params.id;
@@ -34,6 +38,7 @@ class Controller {
   @PATCH('/:id', {
     summary: 'Обновление информации заказа',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async patchOrder(req: BaseRequest, res: Response, next: NextFunction) {
     res.json({ message: 'ok' });
@@ -42,6 +47,7 @@ class Controller {
   @PATCH('/:id/status/preparing', {
     summary: 'Подготовка',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async preparingOrder(req: BaseRequest, res: Response, next: NextFunction) {
     let orderId: string = req.params.id;
@@ -52,6 +58,7 @@ class Controller {
   @PATCH('/:id/status/canceled', {
     summary: 'Отмена заказа',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async canceledOrder(req: BaseRequest, res: Response, next: NextFunction) {
     let orderId: string = req.params.id;
@@ -62,6 +69,7 @@ class Controller {
   @PATCH('/:id/status/delivering', {
     summary: 'Доставление заказа',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async deliveringOrder(req: BaseRequest, res: Response, next: NextFunction) {
     let orderId: string = req.params.id;
@@ -72,6 +80,7 @@ class Controller {
   @PATCH('/:id/status/ready', {
     summary: 'Заказ выполнен',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async readyOrder(req: BaseRequest, res: Response, next: NextFunction) {
     let orderId: string = req.params.id;
@@ -82,6 +91,8 @@ class Controller {
   @POST('/', {
     summary: 'Создание заказа для пользователя (если он позвонил по телефону)',
     handlers: [requireToken, dtoValidator(OrderCreateDto)],
+    body: SAOrderModels.reqOrderCreate,
+    responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async creatUserOrder(req: BaseRequest, res: Response, next: NextFunction) {
     let dto = req.body;

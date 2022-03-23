@@ -1,7 +1,7 @@
 import { RoleTypes } from '../../../utils/constants';
 
 export default class SAUsersModels {
-  reqUserCreate = {
+  static reqUserCreate = {
     phone: '89687309110',
     'firstName?': 'Имя',
   }

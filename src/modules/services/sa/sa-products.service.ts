@@ -8,6 +8,18 @@ import { ProductUpdateDto } from '../../dto/product-update.dto';
 import { PromotionCreateDto } from '../../dto/promotion-create.dto';
 
 export default class SaProductsService {
+  static async getProducts() {
+    let productList = await Product.findAll({
+      include: [
+        {
+          model: Promotion,
+          duplicating: false,
+        },
+      ],
+    });
+    return productList;
+  }
+
   static async getProductsByCategory(categoryName: string) {
     let category = await Category.findOne({
       where: {
@@ -26,6 +38,12 @@ export default class SaProductsService {
       where: {
         categoryId: category.id,
       },
+      include: [
+        {
+          model: Promotion,
+          duplicating: false,
+        },
+      ],
     });
 
     return productList;
@@ -38,6 +56,12 @@ export default class SaProductsService {
           [Op.like]: '%' + searchValue + '%',
         },
       },
+      include: [
+        {
+          model: Promotion,
+          duplicating: false,
+        },
+      ],
     });
 
     return productList;
@@ -48,13 +72,26 @@ export default class SaProductsService {
       where: {
         filialId: filialId,
       },
+      include: [
+        {
+          model: Promotion,
+          duplicating: false,
+        },
+      ],
     });
 
     return productList;
   }
 
   static async getProductById(productId: string) {
-    let product = await Product.findByPk(productId);
+    let product = await Product.findByPk(productId, {
+      include: [
+        {
+          model: Promotion,
+          duplicating: false,
+        },
+      ],
+    });
     if (!product)
       throwError({
         statusCode: 404,
@@ -69,7 +106,14 @@ export default class SaProductsService {
   }
 
   static async updateProductById(dto: ProductUpdateDto) {
-    let product = await Product.findByPk(dto.productId);
+    let product = await Product.findByPk(dto.productId, {
+      include: [
+        {
+          model: Promotion,
+          duplicating: false,
+        },
+      ],
+    });
     if (!product)
       throwError({
         statusCode: 404,

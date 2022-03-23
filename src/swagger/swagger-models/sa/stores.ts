@@ -1,5 +1,5 @@
 export default class SAStoresModels {
-  reqStoreCreate = {
+  static reqStoreCreate = {
     name: 'Название магазина',
     phone: '88005553535',
     //image
