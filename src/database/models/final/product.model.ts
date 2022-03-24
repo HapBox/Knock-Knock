@@ -2,9 +2,9 @@ import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } 
 import OrderProduct from '../relations/order-product.model';
 import Category from './category.model';
 import FileDB from './file-db.model';
-import Filial from './filial.model';
 import Order from './order.model';
 import Promotion from './promotion.model';
+import Store from './store.model';
 
 @Table({
   timestamps: true,
@@ -50,11 +50,11 @@ export default class Product extends Model {
   @BelongsTo(() => Promotion, 'promotionId')
   public promotion!: Promotion;
 
-  @ForeignKey(() => Filial)
-  public filialId!: string;
+  @ForeignKey(() => Store)
+  public storelId!: string;
   
-  @BelongsTo(() => Filial, 'filialId')
-  public filial!: Filial;
+  @BelongsTo(() => Store, 'storelId')
+  public store!: Store;
 
   @BelongsToMany(() => Order, () => OrderProduct)
   public orderList!: Order[];

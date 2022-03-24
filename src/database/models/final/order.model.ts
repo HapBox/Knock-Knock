@@ -1,4 +1,4 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Sequelize, Table } from 'sequelize-typescript';
 import { PaymentTypes, StatusTypes } from '../../../utils/constants';
 import OrderProduct from '../relations/order-product.model';
 import Address from './address.model';
@@ -27,6 +27,22 @@ export default class Order extends Model {
   })
   public dateTo!: Date;
 
+  @Column({
+    defaultValue: StatusTypes.PROCESSING,
+    type: DataType.ENUM({ values: Object.values(StatusTypes) }),
+  })
+  public status!: string;
+
+  @Column({
+    type: DataType.ENUM({ values: Object.values(PaymentTypes) }),
+  })
+  public payment!: string;
+
+  @Column({
+    type: DataType.SMALLINT,
+  })
+  public countPersons!: number;
+
   @ForeignKey(() => User)
   public userId!: string;
 
@@ -44,17 +60,6 @@ export default class Order extends Model {
 
   @BelongsTo(() => Address, 'userAddressId')
   public address!: Address;
-
-  @Column({
-    defaultValue: StatusTypes.PROCESSING,
-    type: DataType.ENUM({ values: Object.values(StatusTypes) }),
-  })
-  public status!: string;
-
-  @Column({
-    type: DataType.ENUM({ values: Object.values(PaymentTypes) }),
-  })
-  public payment!: string;
 
   @BelongsToMany(() => Product, () => OrderProduct)
   public productList!: Product[];

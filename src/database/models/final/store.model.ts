@@ -1,6 +1,7 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
 import FileDB from './file-db.model';
 import Filial from './filial.model';
+import Product from './product.model';
 import Rating from './rating.model';
 
 @Table({
@@ -32,6 +33,9 @@ export default class Store extends Model {
 
   @HasMany(() => Filial, 'storeId')
   public filialList!: Filial[];
+
+  @HasMany(() => Product, 'storeId')
+  public productList!: Product[];
 
   @HasMany(() => Rating, 'storeId')
   public ratingList!: Rating[];

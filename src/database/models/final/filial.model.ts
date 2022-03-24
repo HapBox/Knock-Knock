@@ -1,7 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
 import Address from './address.model';
 import Order from './order.model';
-import Product from './product.model';
 import Store from './store.model';
 
 @Table({
@@ -26,9 +25,6 @@ export default class Filial extends Model {
 
   @BelongsTo(() => Address, 'addressId')
   public address!: Address;
-
-  @HasMany(() => Product, 'filialId')
-  public productList!: Product[];
 
   @HasMany(() => Order, 'filialId')
   public orderList!: Order[];
