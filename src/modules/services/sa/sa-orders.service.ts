@@ -1,11 +1,50 @@
+import { Op } from 'sequelize';
+import Filial from '../../../database/models/final/filial.model';
 import Order from '../../../database/models/final/order.model';
 import { StatusTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
 import { OrderCreateDto } from '../../dto/order-create.dto';
+import { OrderUpdateDto } from '../../dto/order-update.dto';
 
 export default class SaOrdersService {
+  static async getOrders() {
+    const orderList = await Order.findAll();
+    return orderList;
+  }
+
+  static async getOrdersByStoreId(storeId: string) {
+    const filialList = await Filial.findAll({
+      where: {
+        storeId,
+      },
+      attributes: ['id'],
+    });
+
+    const filialIdList = filialList.map((filial) => filial.id);
+
+    const orderList = await Order.findAll({
+      where: {
+        filialId: {
+          [Op.any]: filialIdList,
+        },
+      },
+    });
+
+    return orderList;
+  }
+
+  static async getOrdersByFilialId(filialId: string) {
+    const orderList = await Order.findAll({
+      where: {
+        filialId,
+      },
+    });
+
+    return orderList;
+  }
+
   static async getOrdersByClientId(clientId: string) {
-    let orderList = await Order.findAll({
+    const orderList = await Order.findAll({
       where: {
         userId: clientId,
       },
@@ -15,7 +54,7 @@ export default class SaOrdersService {
   }
 
   static async getOrderById(orderId: string) {
-    let order = await Order.findByPk(orderId);
+    const order = await Order.findByPk(orderId);
 
     if (!order)
       throwError({
@@ -23,6 +62,19 @@ export default class SaOrdersService {
         message: 'Order not found',
       });
 
+    return order;
+  }
+
+  static async updateOrder(dto: OrderUpdateDto) {
+    let order = await Order.findByPk(dto.orderId);
+
+    if (!order)
+      throwError({
+        statusCode: 404,
+        message: 'Order not found',
+      });
+
+    await order.update({ ...dto });
     return order;
   }
 
@@ -115,7 +167,7 @@ export default class SaOrdersService {
   }
 
   static async createPhoneOrder(dto: OrderCreateDto) {
-    let order = await Order.create({
+    const order = await Order.create({
       ...dto,
     });
     return order;

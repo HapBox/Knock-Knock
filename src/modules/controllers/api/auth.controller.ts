@@ -11,22 +11,22 @@ import AuthService from '../../services/auth.service';
 class Controller {
   @POST('/phone', {
     summary: 'Авторизация по номеру телефона (начало)',
-    handlers: [dtoValidator(PhoneAuthDto)]
+    handlers: [dtoValidator(PhoneAuthDto)],
   })
   async phoneAuthStart(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = req.body;
-    const code = await AuthService.phoneLoginStart(dto);
-    res.json(code);
+    const dto: PhoneAuthDto = req.body;
+    const result = await AuthService.phoneLoginStart(dto);
+    res.json(result);
   }
 
   @POST('/phone/confirm', {
     summary: 'Авторизация по номеру телефона (завершение)',
-    handlers: [dtoValidator(PhoneConfirmDto)]
+    handlers: [dtoValidator(PhoneConfirmDto)],
   })
   async phoneAuthConfirm(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = req.body;
-    const token = await AuthService.phoneLoginConfirm(dto);
-    res.json(token);
+    const dto: PhoneConfirmDto = req.body;
+    const result = await AuthService.phoneLoginConfirm(dto);
+    res.json(result);
   }
 
   @GET('/logout', {
@@ -34,8 +34,8 @@ class Controller {
     handlers: [requireToken],
   })
   async logout(req: BaseRequest, res: Response, next: NextFunction) {
-    await AuthService.logout(req.xAccessToken);
-    res.json({ message: 'Logout succesful!' });
+    const result = await AuthService.logout(req.xAccessToken);
+    res.json(result);
   }
 }
 

@@ -11,7 +11,7 @@ export default class ApiStoresService {
     //переделать и продумать нормально
     const stores = await Store.findAll({
       where: {
-        categoryId: categoryId,
+        categoryId,
       },
     });
     return stores;
@@ -30,7 +30,19 @@ export default class ApiStoresService {
 
   static async getStoreById(storeId: string) {
     const store = await Store.findByPk(storeId);
-    return store;
+
+    if (!store) {
+      throwError({
+        statusCode: 404,
+        message: 'Store not found',
+      });
+    }
+    const productList = await Product.findAll({
+      where: {
+        storeId,
+      },
+    });
+    return { store, productList };
   }
 
   static async getFilialList(storeId: string) {
@@ -74,32 +86,39 @@ export default class ApiStoresService {
     return reviewList;
   }
 
-  static async getProductsByCategory(categoryId: string) {
+  static async getProductsByCategory(categoryId: string, storeId: string) {
     const products = await Product.findAll({
       where: {
-        categoryId: categoryId,
+        storeId,
+        categoryId,
       },
     });
     return products;
   }
 
-  static async getProductsBySearch(searchValue: string) {
+  static async getProductsBySearch(searchValue: string, storeId: string) {
     const products = await Product.findAll({
       where: {
         name: {
           [Op.iLike]: '%' + searchValue + '%',
         },
+        storeId,
       },
     });
     return products;
   }
 
-  static async getProductsList(filialId: string) {
+  static async getProductsList(storeId: string) {
     const productList = await Product.findAll({
       where: {
-        filialId: filialId,
+        storeId,
       },
     });
     return productList;
+  }
+
+  static async getProductById(productId: string) {
+    const product = await Product.findByPk(productId);
+    return product;
   }
 }

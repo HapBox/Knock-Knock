@@ -15,8 +15,8 @@ class Controller {
     handlers: [requireToken],
   })
   async getUser(req: BaseRequest, res: Response, next: NextFunction) {
-    const user = await ApiUsersService.getUser(req.userId);
-    res.json(user);
+    const result = await ApiUsersService.getUser(req.userId);
+    res.json(result);
   }
 
   @PATCH('/', {
@@ -25,8 +25,8 @@ class Controller {
   })
   async updateUser(req: BaseRequest, res: Response, next: NextFunction) {
     const dto = { ...req.body, userId: req.userId };
-    const user = await ApiUsersService.updateUser(dto);
-    res.json(user);
+    const result = await ApiUsersService.updateUser(dto);
+    res.json(result);
   }
 
   @GET('/me/reviews', {
@@ -34,8 +34,8 @@ class Controller {
     handlers: [requireToken],
   })
   async getRating(req: BaseRequest, res: Response, next: NextFunction) {
-    const reviews = await ApiUsersService.getUserRatingList(req.userId);
-    res.json(reviews);
+    const result = await ApiUsersService.getUserRatingList(req.userId);
+    res.json(result);
   }
 
   @POST('/me/addresses', {
@@ -44,8 +44,8 @@ class Controller {
   })
   async createAddress(req: BaseRequest, res: Response, next: NextFunction) {
     const dto = { ...req.body, userId: req.userId };
-    const address = await ApiUsersService.createAddress(dto);
-    res.json(address);
+    const result = await ApiUsersService.createAddress(dto);
+    res.json(result);
   }
 
   @GET('/me/addresses', {
@@ -53,8 +53,8 @@ class Controller {
     handlers: [requireToken],
   })
   async getAddresses(req: BaseRequest, res: Response, next: NextFunction) {
-    const addressList = await ApiUsersService.getAddressList(req.userId);
-    res.json(addressList);
+    const result = await ApiUsersService.getAddressList(req.userId);
+    res.json(result);
   }
 
   @PATCH('/me/addresses/:id', {
@@ -62,9 +62,13 @@ class Controller {
     handlers: [requireToken, dtoValidator(AddressUpdateDto)],
   })
   async updateAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = { ...req.body, userId: req.userId, addressId: req.params.id };
-    const address = await ApiUsersService.updateAddress(dto);
-    res.json(address);
+    const dto: AddressUpdateDto = {
+      ...req.body,
+      userId: req.userId,
+      addressId: req.params.id,
+    };
+    const result = await ApiUsersService.updateAddress(dto);
+    res.json(result);
   }
 }
 

@@ -6,7 +6,7 @@ import { UserUpdateDto } from '../../dto/user-update.dto';
 
 export default class SaAdminsService {
   static async getAdmins() {
-    let adminList = await User.findAll({
+    const adminList = await User.findAll({
       where: {
         role: RoleTypes.ADMIN,
       },
@@ -16,7 +16,7 @@ export default class SaAdminsService {
   }
 
   static async getAdminById(adminId: string) {
-    let admin = await User.findOne({
+    const admin = await User.findOne({
       where: {
         id: adminId,
         role: RoleTypes.ADMIN,

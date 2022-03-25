@@ -1,5 +1,3 @@
-//ждем помощи от господа бога
-
 import { IsString, IsInt, IsNotEmpty } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 

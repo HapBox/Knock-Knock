@@ -1,5 +1,4 @@
 import SAAddressesModels from './addresses';
-import SAProductsModels from './products';
 
 export default class SAFilialModels {
   static reqFilialCreate = {
@@ -13,11 +12,5 @@ export default class SAFilialModels {
 
   static resFilialInfoList = {
     filialList: [SAFilialModels.resFilialShortInfo],
-  };
-
-  static resFilialFullInfo = {
-    id: 'UUID',
-    address: SAAddressesModels.resAddressInfo,
-    productList: [SAProductsModels.resProductInfoList],
   };
 }

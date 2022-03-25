@@ -3,6 +3,11 @@ import { throwError } from '../../../utils/http-exception';
 import { RatingUpdateDto } from '../../dto/rating-update.dto';
 
 export default class ApiReviewsService {
+  static async getReviewById(reviewId: string) {
+    const review = await Rating.findByPk(reviewId);
+    return review;
+  }
+
   static async updateReview(dto: RatingUpdateDto) {
     const review = await Rating.findByPk(dto.ratingId);
     if (!review) {
@@ -23,5 +28,6 @@ export default class ApiReviewsService {
       });
     }
     await review.destroy();
+    return { message: 'Delete succesfull' };
   }
 }

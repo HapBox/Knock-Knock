@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class AddressUpdateDto extends BaseDto {

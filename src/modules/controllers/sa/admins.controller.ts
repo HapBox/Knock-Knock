@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { ApiController, DELETE, GET, PATCH, POST } from '../../../core/api-decorators';
+import { ApiController, GET, PATCH, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import SAUsersModels from '../../../swagger/swagger-models/sa/users';
@@ -17,8 +17,8 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfoList)],
   })
   async getAdmins(req: BaseRequest, res: Response, next: NextFunction) {
-    let adminList = await SaAdminsService.getAdmins();
-    res.json(adminList);
+    const result = await SaAdminsService.getAdmins();
+    res.json(result);
   }
 
   @GET('/:id', {
@@ -27,9 +27,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async getAdmin(req: BaseRequest, res: Response, next: NextFunction) {
-    let adminId: string = req.params.id;
-    let admin = await SaAdminsService.getAdminById(adminId);
-    res.json(admin);
+    const adminId: string = req.params.id;
+    const result = await SaAdminsService.getAdminById(adminId);
+    res.json(result);
   }
 
   @PATCH('/:id', {
@@ -39,12 +39,12 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async patchAdmin(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = {
+    const dto: UserUpdateDto = {
       ...req.body,
       adminId: req.params.id,
     };
-    let admin = await SaAdminsService.updateAdmin(dto);
-    res.json(admin);
+    const result = await SaAdminsService.updateAdmin(dto);
+    res.json(result);
   }
 
   @PATCH('/:id/block', {
@@ -53,9 +53,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async blockAdmin(req: BaseRequest, res: Response, next: NextFunction) {
-    let adminId: string = req.params.id;
-    let admin = await SaAdminsService.blockAdmin(adminId);
-    res.json(admin);
+    const adminId = req.params.id;
+    const result = await SaAdminsService.blockAdmin(adminId);
+    res.json(result);
   }
 
   @PATCH('/:id/unblock', {
@@ -64,9 +64,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async unblockAdmin(req: BaseRequest, res: Response, next: NextFunction) {
-    let adminId: string = req.params.id;
-    let admin = await SaAdminsService.unblockAdmin(adminId);
-    res.json(admin);
+    const adminId: string = req.params.id;
+    const result = await SaAdminsService.unblockAdmin(adminId);
+    res.json(result);
   }
 
   @POST('/', {
@@ -76,9 +76,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async createAdmin(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = req.body;
-    let admin = await SaAdminsService.createAdmin(dto);
-    res.json(admin);
+    const dto: UserCreateDto = req.body;
+    const result = await SaAdminsService.createAdmin(dto);
+    res.json(result);
   }
 
   @PATCH('/:id/dismiss', {
@@ -87,9 +87,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async dismissAdmin(req: BaseRequest, res: Response, next: NextFunction) {
-    let adminId: string = req.params.id;
-    let admin = await SaAdminsService.dismissAdmin(adminId);
-    res.json(admin);
+    const adminId: string = req.params.id;
+    const result = await SaAdminsService.dismissAdmin(adminId);
+    res.json(result);
   }
 }
 

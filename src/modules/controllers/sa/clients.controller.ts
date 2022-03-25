@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { ApiController, GET, PATCH, POST } from '../../../core/api-decorators';
+import { ApiController, GET, PATCH } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import SAUsersModels from '../../../swagger/swagger-models/sa/users';
@@ -16,8 +16,8 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfoList)],
   })
   async getClients(req: BaseRequest, res: Response, next: NextFunction) {
-    let clientList = await SaClientsService.getClients();
-    res.json(clientList);
+    const result = await SaClientsService.getClients();
+    res.json(result);
   }
 
   @GET('/:id', {
@@ -26,9 +26,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async getClientById(req: BaseRequest, res: Response, next: NextFunction) {
-    let clientId: string = req.params.id;
-    let client = await SaClientsService.getClientById(clientId);
-    res.json(client);
+    const clientId: string = req.params.id;
+    const result = await SaClientsService.getClientById(clientId);
+    res.json(result);
   }
 
   @PATCH('/:id/block', {
@@ -37,9 +37,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async blockClient(req: BaseRequest, res: Response, next: NextFunction) {
-    let clientId: string = req.params.id;
-    let client = await SaClientsService.blockCLient(clientId);
-    res.json(client);
+    const clientId: string = req.params.id;
+    const result = await SaClientsService.blockCLient(clientId);
+    res.json(result);
   }
 
   @PATCH('/:id/unblock', {
@@ -48,9 +48,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async unblockClient(req: BaseRequest, res: Response, next: NextFunction) {
-    let clientId: string = req.params.id;
-    let client = await SaClientsService.unblockClient(clientId);
-    res.json(client);
+    const clientId: string = req.params.id;
+    const result = await SaClientsService.unblockClient(clientId);
+    res.json(result);
   }
 
   @PATCH('/:id', {
@@ -60,9 +60,12 @@ class Controller {
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async patchClient(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = { ...req.body, clientId: req.params.id };
-    let client = await SaClientsService.updateClient(dto);
-    res.json(client);
+    const dto: UserUpdateDto = {
+      ...req.body,
+      clientId: req.params.id,
+    };
+    const result = await SaClientsService.updateClient(dto);
+    res.json(result);
   }
 }
 

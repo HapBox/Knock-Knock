@@ -32,6 +32,7 @@ export default class ApiCardsService {
         message: 'Not found.',
       });
     }
-    return await card.update({isExist: false});
+    await card.update({ isExist: false });
+    return { message: 'Delete succesfull' };
   }
 }

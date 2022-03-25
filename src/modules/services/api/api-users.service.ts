@@ -27,7 +27,7 @@ export default class ApiUsersService {
         message: 'Not found.',
       });
     }
-    return await user.update(dto);;
+    return await user.update(dto);
   }
 
   static async getUserRatingList(userId: string) {
@@ -67,6 +67,6 @@ export default class ApiUsersService {
         message: 'Not found.',
       });
     }
-    return await address.update(dto);;
+    return await address.update(dto);
   }
 }

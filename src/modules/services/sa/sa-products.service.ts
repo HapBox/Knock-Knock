@@ -9,7 +9,7 @@ import { PromotionCreateDto } from '../../dto/promotion-create.dto';
 
 export default class SaProductsService {
   static async getProducts() {
-    let productList = await Product.findAll({
+    const productList = await Product.findAll({
       include: [
         {
           model: Promotion,
@@ -21,7 +21,7 @@ export default class SaProductsService {
   }
 
   static async getProductsByCategory(categoryName: string) {
-    let category = await Category.findOne({
+    const category = await Category.findOne({
       where: {
         name: categoryName,
       },
@@ -34,7 +34,7 @@ export default class SaProductsService {
       });
     }
 
-    let productList = await Product.findAll({
+    const productList = await Product.findAll({
       where: {
         categoryId: category.id,
       },
@@ -50,7 +50,7 @@ export default class SaProductsService {
   }
 
   static async getProductsBySearchValue(searchValue: string) {
-    let productList = await Product.findAll({
+    const productList = await Product.findAll({
       where: {
         name: {
           [Op.iLike]: '%' + searchValue + '%',
@@ -67,10 +67,10 @@ export default class SaProductsService {
     return productList;
   }
 
-  static async getProductsByFilialId(filialId: string) {
-    let productList = await Product.findAll({
+  static async getProductsByStoreId(storeId: string) {
+    const productList = await Product.findAll({
       where: {
-        filialId: filialId,
+        storeId,
       },
       include: [
         {
@@ -83,8 +83,26 @@ export default class SaProductsService {
     return productList;
   }
 
+  static async getCategoriesSummary() {
+    const categories = await Category.findAll({
+      attributes: ['id', 'name'],
+    });
+    let result: Array<Object> = [];
+    categories.forEach(async (category) => {
+      result.push({
+        category: category.name,
+        number: await Product.count({
+          where: {
+            categoryId: category.id,
+          },
+        }),
+      });
+    });
+    return result;
+  }
+
   static async getProductById(productId: string) {
-    let product = await Product.findByPk(productId, {
+    const product = await Product.findByPk(productId, {
       include: [
         {
           model: Promotion,
@@ -101,7 +119,7 @@ export default class SaProductsService {
   }
 
   static async createProduct(dto: ProductCreateDto) {
-    let product = await Product.create(dto);
+    const product = await Product.create(dto);
     return product;
   }
 
@@ -127,7 +145,7 @@ export default class SaProductsService {
   }
 
   static async deleteProductById(productId: string) {
-    let product = await Product.findByPk(productId);
+    const product = await Product.findByPk(productId);
 
     if (!product)
       throwError({
@@ -136,6 +154,8 @@ export default class SaProductsService {
       });
 
     await product.destroy();
+
+    return { message: 'Delete succesfull' };
   }
 
   static async createPromotion(dto: PromotionCreateDto) {
@@ -167,7 +187,7 @@ export default class SaProductsService {
         message: 'Product not found',
       });
 
-    let promotion = await Promotion.findByPk(product.promotionId);
+    const promotion = await Promotion.findByPk(product.promotionId);
 
     if (!promotion) {
       throwError({
@@ -177,5 +197,7 @@ export default class SaProductsService {
     }
     await promotion.destroy();
     await product.update({ promotionId: '' });
+
+    return { message: 'Delete succesfull' };
   }
 }

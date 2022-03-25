@@ -5,7 +5,7 @@ import { UserUpdateDto } from '../../dto/user-update.dto';
 
 export default class SaClientsService {
   static async getClients() {
-    let clientList = await User.findAll({
+    const clientList = await User.findAll({
       where: {
         role: RoleTypes.USER,
       },
@@ -15,7 +15,7 @@ export default class SaClientsService {
   }
 
   static async getClientById(clientId: string) {
-    let client = await User.findByPk(clientId);
+    const client = await User.findByPk(clientId);
 
     if (!client)
       throwError({

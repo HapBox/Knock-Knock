@@ -6,6 +6,7 @@ import SAOrderModels from '../../../swagger/swagger-models/sa/orders';
 import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
 import { OrderCreateDto } from '../../dto/order-create.dto';
+import { OrderUpdateDto } from '../../dto/order-update.dto';
 import SaOrdersService from '../../services/sa/sa-orders.service';
 
 @ApiController('/sa/api/orders')
@@ -14,14 +15,24 @@ class Controller {
     summary: 'Получение списка заказов',
     query: {
       'userId?': 'id клиента',
+      'filialId?': 'id филиала',
+      'storeId?': 'id магазина',
     },
     handlers: [requireToken],
     responses: [SwaggerUtils.body200(SAOrderModels.resOrdersInfo)],
   })
   async getOrders(req: BaseRequest, res: Response, next: NextFunction) {
-    let userId: string = String(req.query.userId);
-    let ordeList = await SaOrdersService.getOrdersByClientId(userId);
-    res.json(ordeList);
+    let result;
+    if (req.query.userId) {
+      result = await SaOrdersService.getOrdersByClientId(String(req.query.userId));
+    } else if (req.query.filialId) {
+      result = await SaOrdersService.getOrdersByFilialId(String(req.query.filialId));
+    } else if (req.query.storeId) {
+      result = await SaOrdersService.getOrdersByStoreId(String(req.query.storeId));
+    } else {
+      result = await SaOrdersService.getOrders();
+    }
+    res.json(result);
   }
 
   @GET('/:id', {
@@ -30,18 +41,23 @@ class Controller {
     responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async getOrderById(req: BaseRequest, res: Response, next: NextFunction) {
-    let orderId: string = req.params.id;
-    let order = await SaOrdersService.getOrderById(orderId);
-    res.json(order);
+    const orderId: string = req.params.id;
+    const result = await SaOrdersService.getOrderById(orderId);
+    res.json(result);
   }
 
   @PATCH('/:id', {
     summary: 'Обновление информации заказа',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(OrderUpdateDto)],
     responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async patchOrder(req: BaseRequest, res: Response, next: NextFunction) {
-    res.json({ message: 'ok' });
+    const dto: OrderUpdateDto = {
+      ...req.body,
+      orderId: req.params.id,
+    };
+    const result = SaOrdersService.updateOrder(dto);
+    res.json(result);
   }
 
   @PATCH('/:id/status/preparing', {
@@ -50,9 +66,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async preparingOrder(req: BaseRequest, res: Response, next: NextFunction) {
-    let orderId: string = req.params.id;
-    let order = SaOrdersService.prepareOrder(orderId);
-    res.json(order);
+    const orderId: string = req.params.id;
+    const result = SaOrdersService.prepareOrder(orderId);
+    res.json(result);
   }
 
   @PATCH('/:id/status/canceled', {
@@ -61,9 +77,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async canceledOrder(req: BaseRequest, res: Response, next: NextFunction) {
-    let orderId: string = req.params.id;
-    let order = SaOrdersService.cancelOrder(orderId);
-    res.json(order);
+    const orderId: string = req.params.id;
+    const result = SaOrdersService.cancelOrder(orderId);
+    res.json(result);
   }
 
   @PATCH('/:id/status/delivering', {
@@ -72,9 +88,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async deliveringOrder(req: BaseRequest, res: Response, next: NextFunction) {
-    let orderId: string = req.params.id;
-    let order = SaOrdersService.deliverOrder(orderId);
-    res.json(order);
+    const orderId: string = req.params.id;
+    const result = SaOrdersService.deliverOrder(orderId);
+    res.json(result);
   }
 
   @PATCH('/:id/status/ready', {
@@ -83,9 +99,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async readyOrder(req: BaseRequest, res: Response, next: NextFunction) {
-    let orderId: string = req.params.id;
-    let order = SaOrdersService.readyOrder(orderId);
-    res.json(order);
+    const orderId: string = req.params.id;
+    const result = SaOrdersService.readyOrder(orderId);
+    res.json(result);
   }
 
   @POST('/', {
@@ -95,9 +111,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAOrderModels.resOrderInfo)],
   })
   async creatUserOrder(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = req.body;
-    let order = await SaOrdersService.createPhoneOrder(dto);
-    res.json(order);
+    const dto: OrderCreateDto = req.body;
+    const result = await SaOrdersService.createPhoneOrder(dto);
+    res.json(result);
   }
 }
 

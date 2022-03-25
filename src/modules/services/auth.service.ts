@@ -70,7 +70,8 @@ export default class AuthService {
     await Token.destroy({
       where: {
         value: tokenValue,
-      }
-    })
+      },
+    });
+    return { message: 'Logout succesfull' };
   }
 }

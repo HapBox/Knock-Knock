@@ -19,9 +19,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAAddressesModels.resAddressInfo)],
   })
   async createAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = req.body;
-    let address = await SaAddressesService.createAddress(dto);
-    res.json(address);
+    const dto: AddressCreateDto = req.body;
+    const result = await SaAddressesService.createAddress(dto);
+    res.json(result);
   }
 
   @PATCH('/:id', {
@@ -31,9 +31,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAAddressesModels.resAddressInfo)],
   })
   async patchAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = { ...req.body, addressId: req.params.id };
-    let address = await SaAddressesService.patchAddress(dto);
-    res.json(address);
+    const dto: AddressUpdateDto = { ...req.body, addressId: req.params.id };
+    const result = await SaAddressesService.patchAddress(dto);
+    res.json(result);
   }
 
   @DELETE('/:id', {
@@ -41,9 +41,9 @@ class Controller {
     handlers: [requireToken],
   })
   async deleteAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    let addressId = req.params.id;
-    await SaAddressesService.deleteAddress(addressId);
-    res.json({ message: 'ok' });
+    const addressId = req.params.id;
+    const result = await SaAddressesService.deleteAddress(addressId);
+    res.json(result);
   }
 }
 

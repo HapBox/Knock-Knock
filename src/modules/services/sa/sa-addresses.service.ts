@@ -10,7 +10,7 @@ export default class SaAddressesService {
   }
 
   static async patchAddress(dto: AddressUpdateDto) {
-    let address = await Address.findByPk(dto.addressId);
+    const address = await Address.findByPk(dto.addressId);
 
     if (!address)
       throwError({
@@ -25,7 +25,7 @@ export default class SaAddressesService {
   }
 
   static async deleteAddress(addressId: string) {
-    let address = await Address.findByPk(addressId);
+    const address = await Address.findByPk(addressId);
 
     if (!address)
       throwError({
@@ -34,5 +34,6 @@ export default class SaAddressesService {
       });
 
     await address.destroy();
+    return { message: 'Delete succesfull' };
   }
 }

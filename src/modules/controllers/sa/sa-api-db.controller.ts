@@ -13,7 +13,7 @@ class Controller {
   async wipe(req: BaseRequest, res: Response, next: NextFunction) {
     await dropDB();
     res.json({
-      message: 'test',
+      message: 'DataBase wiped',
     });
   }
 }

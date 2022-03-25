@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { ApiController, DELETE, PATCH } from '../../../core/api-decorators';
+import { ApiController, DELETE, GET, PATCH } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import BaseRequest from '../../base/base.request';
@@ -8,14 +8,26 @@ import ApiReviewsService from '../../services/api/api-reviews.service';
 
 @ApiController('/api/reviews')
 class Controller {
+  @GET('/:id', {
+    summary: 'Получение отзыва по ID',
+  })
+  async getReviewById(req: BaseRequest, res: Response, next: NextFunction) {
+    let reviewId = req.params.id;
+    const result = await ApiReviewsService.getReviewById(reviewId);
+    res.json(result);
+  }
+
   @PATCH('/:id', {
     summary: 'Обновление отзыва',
     handlers: [requireToken, dtoValidator(RatingUpdateDto)],
   })
   async updateRating(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = {...req.body, ratingId: req.params.id}
-    const review = await ApiReviewsService.updateReview(dto);
-    res.json(review);
+    const dto: RatingUpdateDto = {
+      ...req.body,
+      ratingId: req.params.id,
+    };
+    const result = await ApiReviewsService.updateReview(dto);
+    res.json(result);
   }
 
   @DELETE('/:id', {
@@ -23,8 +35,8 @@ class Controller {
     handlers: [requireToken],
   })
   async deleteRating(req: BaseRequest, res: Response, next: NextFunction) {
-    await ApiReviewsService.deleteReview(req.params.id);
-    res.json({ message: 'succesfull' });
+    const result = await ApiReviewsService.deleteReview(req.params.id);
+    res.json(result);
   }
 }
 

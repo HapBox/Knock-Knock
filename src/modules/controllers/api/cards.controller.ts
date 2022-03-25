@@ -13,9 +13,9 @@ class Controller {
     handlers: [requireToken, dtoValidator(CardCreateDto)],
   })
   async createCard(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = { ...req.body, userId: req.userId };
-    const card = await ApiCardsService.createCard(dto);
-    res.json(card);
+    const dto: CardCreateDto = { ...req.body, userId: req.userId };
+    const result = await ApiCardsService.createCard(dto);
+    res.json(result);
   }
 
   @GET('/', {
@@ -23,8 +23,8 @@ class Controller {
     handlers: [requireToken],
   })
   async getCards(req: BaseRequest, res: Response, next: NextFunction) {
-    const cardList = await ApiCardsService.getCards(req.userId);
-    res.json(cardList);
+    const result = await ApiCardsService.getCards(req.userId);
+    res.json(result);
   }
 
   @DELETE('/:id', {
@@ -32,8 +32,8 @@ class Controller {
     handlers: [requireToken],
   })
   async deleteCard(req: BaseRequest, res: Response, next: NextFunction) {
-    await ApiCardsService.deleteCard(req.params.id, req.userId);
-    res.json({ message: 'succesfull' });
+    const result = await ApiCardsService.deleteCard(req.params.id, req.userId);
+    res.json(result);
   }
 }
 

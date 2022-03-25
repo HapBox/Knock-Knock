@@ -7,32 +7,32 @@ import SAStoresModels from '../../../swagger/swagger-models/sa/stores';
 import SAUsersModels from '../../../swagger/swagger-models/sa/users';
 import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
-import { AddressUpdateDto } from '../../dto/address-update.dto';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
+import { FilialUpdateDto } from '../../dto/filial-update.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
 import SaStoresService from '../../services/sa/sa-stores.service';
 
 @ApiController('/sa/api/stores')
 class Controller {
   @GET('/', {
-    summary: 'Получение списка магазинов',
+    summary: 'Получение списка магазинов и количества их продуктов',
     handlers: [requireToken],
     responses: [SwaggerUtils.body200(SAStoresModels.resStoreInfoList)],
   })
   async getStores(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeList = await SaStoresService.getStores();
-    res.json(storeList);
+    const result = await SaStoresService.getStores();
+    res.json(result);
   }
 
   @GET('/:id', {
-    summary: 'Получение информации о магазине по id',
+    summary: 'Получение информации о магазине и списка продуктов по id',
     handlers: [requireToken],
     responses: [SwaggerUtils.body200(SAStoresModels.resStoreInfo)],
   })
   async getStoreById(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeId = req.params.id;
-    let store = await SaStoresService.getStoreById(storeId);
-    res.json({ message: 'ok' });
+    const storeId = req.params.id;
+    const result = await SaStoresService.getStoreById(storeId);
+    res.json(result);
   }
 
   @DELETE('/:id', {
@@ -40,9 +40,9 @@ class Controller {
     handlers: [requireToken],
   })
   async deleteStoreById(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeId = req.params.id;
-    await SaStoresService.deleteStoreById(storeId);
-    res.json({ message: 'Store deleted' });
+    const storeId = req.params.id;
+    const result = await SaStoresService.deleteStoreById(storeId);
+    res.json(result);
   }
 
   @PATCH('/:id', {
@@ -52,8 +52,11 @@ class Controller {
     responses: [SwaggerUtils.body200(SAStoresModels.resStoreInfo)],
   })
   async patchStoreById(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = { ...req.body, storeId: req.params.id };
-    let store = await SaStoresService.updateStoreById(dto);
+    const dto: StoreUpdateDto = {
+      ...req.body,
+      storeId: req.params.id,
+    };
+    const store = await SaStoresService.updateStoreById(dto);
     res.json(store);
   }
 
@@ -63,8 +66,8 @@ class Controller {
     responses: [SwaggerUtils.body200(SAFilialModels.resFilialInfoList)],
   })
   async getStoreFilials(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeId = req.params.id;
-    let filialList = await SaStoresService.getStoreFilials(storeId);
+    const storeId = req.params.id;
+    const filialList = await SaStoresService.getStoreFilials(storeId);
     res.json(filialList);
   }
 
@@ -75,23 +78,28 @@ class Controller {
     responses: [SwaggerUtils.body200(SAFilialModels.resFilialShortInfo)],
   })
   async createStoreFilials(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto: FilialCreateDto = { ...req.body, storeId: req.params.id };
-    let filial = await SaStoresService.createStoreFilial(dto);
-    res.json(filial);
+    const dto: FilialCreateDto = {
+      ...req.body,
+      storeId: req.params.id,
+    };
+    const result = await SaStoresService.createStoreFilial(dto);
+    res.json(result);
   }
 
   @PATCH('/:storeId/filials/:filialId', {
     summary: 'Обновление информации филиала магазина',
-    handlers: [requireToken, dtoValidator(AddressUpdateDto)],
+    handlers: [requireToken, dtoValidator(FilialUpdateDto)],
     body: SAFilialModels.reqFilialCreate,
     responses: [SwaggerUtils.body200(SAFilialModels.resFilialShortInfo)],
   })
   async patchStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeId = req.params.id;
-    let filialId = req.params.filialId;
-    let dto = req.body;
-    let filial = await SaStoresService.updateStoreFilial(storeId, filialId, dto);// переделать с дто
-    res.json(filial);
+    const dto: FilialUpdateDto = {
+      ...req.body,
+      storeId: req.params.id,
+      filialId: req.params.filialId,
+    };
+    const result = await SaStoresService.updateStoreFilial(dto);
+    res.json(result);
   }
 
   @DELETE('/:storeId/filials/:filialId', {
@@ -99,22 +107,22 @@ class Controller {
     handlers: [requireToken],
   })
   async deleteStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeId = req.params.id;
-    let filialId = req.params.filialId;
-    await SaStoresService.deleteStoreFilial(storeId, filialId);
-    res.json({ message: 'Deleted filial' });
+    const storeId = req.params.id;
+    const filialId = req.params.filialId;
+    const result = await SaStoresService.deleteStoreFilial(storeId, filialId);
+    res.json(result);
   }
 
-  @PATCH('/:storeId/workers/:workerId/add', {
+  @PATCH('/:storeId/workers/:workerPhone/add', {
     summary: 'Добавление администратора магазина',
     handlers: [requireToken],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async addWorker(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeId = req.params.id;
-    let workerId = req.params.workerId;
-    let worker = await SaStoresService.addWorker(storeId, workerId);
-    res.json(worker);
+    const storeId = req.params.id;
+    const workerPhone = req.params.workerPhone;
+    const result = await SaStoresService.addWorker(storeId, workerPhone);
+    res.json(result);
   }
 
   @PATCH('/:storeId/workers/:workerId/remove', {
@@ -122,10 +130,10 @@ class Controller {
     handlers: [requireToken],
   })
   async removeWorker(req: BaseRequest, res: Response, next: NextFunction) {
-    let storeId = req.params.id;
-    let workerId = req.params.workerId;
-    await SaStoresService.removeWorker(storeId, workerId);
-    res.json({ message: 'Worker deleted' }); // перекинуть в сервис
+    const storeId = req.params.id;
+    const workerId = req.params.workerId;
+    const result = await SaStoresService.removeWorker(storeId, workerId);
+    res.json(result);
   }
 }
 

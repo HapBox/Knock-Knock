@@ -20,26 +20,32 @@ class Controller {
     query: {
       'category?': 'Название категории',
       'searchValue?': 'Название тега поиска',
-      'filialId?': 'ID филиала',
+      'storeId?': 'ID магазина',
     },
     responses: [SwaggerUtils.body200(SAProductsModels.resProductInfoList)],
   })
   async getProducts(req: BaseRequest, res: Response, next: NextFunction) {
-    let productList;
-    let category = req.query.category;
-    let searchValue = req.query.searchValue;
-    let filialId = req.query.filialId;
-    if (category) {
-      productList = await SaProductsService.getProductsByCategory(String(category));
-    } else if (searchValue) {
-      productList = await SaProductsService.getProductsBySearchValue(String(searchValue));
-    } else if (filialId) {
-      productList = await SaProductsService.getProductsByFilialId(String(filialId));
+    let result;
+    if (req.query.category) {
+      result = await SaProductsService.getProductsByCategory(String(req.query.category));
+    } else if (req.query.searchValue) {
+      result = await SaProductsService.getProductsBySearchValue(String(req.query.searchValue));
+    } else if (req.query.storeId) {
+      result = await SaProductsService.getProductsByStoreId(String(req.query.storeId));
     } else {
-      productList = await SaProductsService.getProducts();
+      result = await SaProductsService.getProducts();
     }
 
-    res.json(productList);
+    res.json(result);
+  }
+
+  @GET('/categorySummary', {
+    summary: 'Получение количества товаров по каждой категории',
+    handlers: [requireToken],
+  })
+  async getCategorySummary(req: BaseRequest, res: Response, next: NextFunction) {
+    const result = await SaProductsService.getCategoriesSummary();
+    res.json(result);
   }
 
   @GET('/:id', {
@@ -48,9 +54,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
   })
   async getProduct(req: BaseRequest, res: Response, next: NextFunction) {
-    let productId = req.params.id;
-    let product = await SaProductsService.getProductById(productId);
-    res.json(product);
+    const productId = req.params.id;
+    const result = await SaProductsService.getProductById(productId);
+    res.json(result);
   }
 
   @POST('/', {
@@ -60,9 +66,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
   })
   async createProduct(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = req.body;
-    let product = await SaProductsService.createProduct(dto);
-    res.json(product);
+    const dto: ProductCreateDto = req.body;
+    const result = await SaProductsService.createProduct(dto);
+    res.json(result);
   }
 
   @PATCH('/:id', {
@@ -72,9 +78,12 @@ class Controller {
     responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
   })
   async updateProduct(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = { ...req.body, productId: req.params.id };
-    let product = await SaProductsService.updateProductById(dto);
-    res.json(product);
+    const dto: ProductUpdateDto = {
+      ...req.body,
+      productId: req.params.id,
+    };
+    const result = await SaProductsService.updateProductById(dto);
+    res.json(result);
   }
 
   @DELETE('/:id', {
@@ -82,9 +91,9 @@ class Controller {
     handlers: [requireToken],
   })
   async deleteProduct(req: BaseRequest, res: Response, next: NextFunction) {
-    let productId = req.params.id;
-    await SaProductsService.deleteProductById(productId);
-    res.json({ message: 'Product deleted' });
+    const productId = req.params.id;
+    const result = await SaProductsService.deleteProductById(productId);
+    res.json(result);
   }
 
   @POST('/:id/promotion', {
@@ -94,9 +103,12 @@ class Controller {
     responses: [SwaggerUtils.body200(SAPromotionModels.resPromotionInfo)],
   })
   async createPromotion(req: BaseRequest, res: Response, next: NextFunction) {
-    let dto = { ...req.body, productId: req.params.id };
-    let promotion = await SaProductsService.createPromotion(dto);
-    res.json(promotion);
+    const dto: PromotionCreateDto = {
+      ...req.body,
+      productId: req.params.id,
+    };
+    const result = await SaProductsService.createPromotion(dto);
+    res.json(result);
   }
 
   @DELETE('/:id/promotion', {
@@ -104,9 +116,9 @@ class Controller {
     handlers: [requireToken],
   })
   async deletePromotion(req: BaseRequest, res: Response, next: NextFunction) {
-    let productId = req.params.id;
-    await SaProductsService.deletePromotion(productId);
-    res.json({ message: 'Promotion deleted' });
+    const productId = req.params.id;
+    const result = await SaProductsService.deletePromotion(productId);
+    res.json(result);
   }
 }
 export default new Controller();

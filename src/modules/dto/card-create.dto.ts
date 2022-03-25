@@ -1,4 +1,4 @@
-import { IsDate, IsInt, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsDate, IsInt, IsNotEmpty } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class CardCreateDto extends BaseDto {

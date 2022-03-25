@@ -1,20 +1,34 @@
 import Address from '../../../database/models/final/address.model';
 import Filial from '../../../database/models/final/filial.model';
+import Product from '../../../database/models/final/product.model';
 import Store from '../../../database/models/final/store.model';
 import User from '../../../database/models/final/user.model';
 import { throwError } from '../../../utils/http-exception';
-import { AddressUpdateDto } from '../../dto/address-update.dto';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
+import { FilialUpdateDto } from '../../dto/filial-update.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
 
 export default class SaStoresService {
   static async getStores() {
-    let storeList = await Store.findAll();
-    return storeList;
+    const storeList = await Store.findAll();
+
+    let result: Array<Object> = [];
+    storeList.forEach(async (store) => {
+      result.push({
+        store,
+        number: await Product.count({
+          where: {
+            storeId: store.id,
+          },
+        }),
+      });
+    });
+
+    return result;
   }
 
   static async getStoreById(storeId: string) {
-    let store = await Store.findByPk(storeId);
+    const store = await Store.findByPk(storeId);
 
     if (!store) {
       throwError({
@@ -23,11 +37,17 @@ export default class SaStoresService {
       });
     }
 
-    return store;
+    const productList = await Product.findAll({
+      where: {
+        storeId,
+      },
+    });
+
+    return { store, productList };
   }
 
   static async deleteStoreById(storeId: string) {
-    let store = await Store.findByPk(storeId);
+    const store = await Store.findByPk(storeId);
 
     if (!store) {
       throwError({
@@ -37,6 +57,7 @@ export default class SaStoresService {
     }
 
     await store.destroy();
+    return { message: 'Delete succesfull' };
   }
 
   static async updateStoreById(dto: StoreUpdateDto) {
@@ -55,7 +76,7 @@ export default class SaStoresService {
   }
 
   static async getStoreFilials(storeId: string) {
-    let store = await Store.findByPk(storeId);
+    const store = await Store.findByPk(storeId);
 
     if (!store) {
       throwError({
@@ -64,7 +85,7 @@ export default class SaStoresService {
       });
     }
 
-    let filialList = await Filial.findAll({
+    const filialList = await Filial.findAll({
       where: {
         storeId: storeId,
       },
@@ -74,7 +95,7 @@ export default class SaStoresService {
   }
 
   static async createStoreFilial(dto: FilialCreateDto) {
-    let store = await Store.findByPk(dto.storeId);
+    const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
       throwError({
@@ -83,20 +104,20 @@ export default class SaStoresService {
       });
     }
 
-    let address = await Address.create({
+    const address = await Address.create({
       ...dto.address,
     });
 
-    let filial = await Filial.create({
+    const filial = await Filial.create({
       addressId: address.id,
-      ...dto
+      ...dto,
     });
 
     return filial;
   }
 
-  static async updateStoreFilial(storeId: string, filialId: string, dto: AddressUpdateDto) {
-    let store = await Store.findByPk(storeId);
+  static async updateStoreFilial(dto: FilialUpdateDto) {
+    const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
       throwError({
@@ -105,7 +126,7 @@ export default class SaStoresService {
       });
     }
 
-    let filial = await Filial.findByPk(filialId);
+    const filial = await Filial.findByPk(dto.filialId);
 
     if (!filial) {
       throwError({
@@ -122,12 +143,12 @@ export default class SaStoresService {
         message: 'Address not found',
       });
     }
-    await address.update({ ...dto });
+    await address.update({ ...dto.address });
     return address;
   }
 
   static async deleteStoreFilial(storeId: string, filialId: string) {
-    let store = await Store.findByPk(storeId);
+    const store = await Store.findByPk(storeId);
 
     if (!store) {
       throwError({
@@ -136,7 +157,7 @@ export default class SaStoresService {
       });
     }
 
-    let filial = await Filial.findByPk(filialId);
+    const filial = await Filial.findByPk(filialId);
 
     if (!filial) {
       throwError({
@@ -145,14 +166,23 @@ export default class SaStoresService {
       });
     }
 
-    let address = await Address.findByPk(filial.addressId);
+    const address = await Address.findByPk(filial.addressId);
+
+    if (!address) {
+      throwError({
+        statusCode: 404,
+        message: 'Address not found',
+      });
+    }
 
     await address?.destroy();
     await filial.destroy();
+
+    return { message: 'Delete succesfull' };
   }
 
-  static async addWorker(storeId: string, workerId: string) {
-    let store = await Store.findByPk(storeId);
+  static async addWorker(storeId: string, workerPhone: string) {
+    const store = await Store.findByPk(storeId);
 
     if (!store) {
       throwError({
@@ -161,7 +191,11 @@ export default class SaStoresService {
       });
     }
 
-    let user = await User.findByPk(workerId);
+    let user = await User.findOne({
+      where: {
+        phone: workerPhone,
+      },
+    });
 
     if (!user) {
       throwError({
@@ -184,7 +218,7 @@ export default class SaStoresService {
   }
 
   static async removeWorker(storeId: string, workerId: string) {
-    let store = await Store.findByPk(storeId);
+    const store = await Store.findByPk(storeId);
 
     if (!store) {
       throwError({
@@ -210,5 +244,7 @@ export default class SaStoresService {
     user.update({
       workStoreId: null,
     });
+
+    return { message: 'Worker removed' };
   }
 }

@@ -4,11 +4,25 @@ import Rating from '../../../database/models/final/rating.model';
 import Store from '../../../database/models/final/store.model';
 import { StatusTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
-import { AddressCreateDto } from '../../dto/address-create.dto';
+import { OrderCreateDto } from '../../dto/order-create.dto';
 import { RatingCreateDto } from '../../dto/rating-create.dto';
 
 export default class ApiOrdersService {
-  static async getOrder(orderId: string, userId: string) {
+  static async getOrders(userId: string) {
+    const orderList = await Order.findAll({
+      where: {
+        userId,
+      },
+    });
+    return orderList;
+  }
+
+  static async createOrder(dto: OrderCreateDto) {
+    const order = await Order.create({ ...dto });
+    return order;
+  }
+
+  static async getOrderById(orderId: string, userId: string) {
     const order = await Order.findOne({
       where: {
         id: orderId,
