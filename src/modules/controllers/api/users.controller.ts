@@ -24,7 +24,10 @@ class Controller {
     handlers: [requireToken, dtoValidator(UserUpdateDto)],
   })
   async updateUser(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = { ...req.body, userId: req.userId };
+    const dto = {
+      ...req.body,
+      userId: req.userId,
+    };
     const result = await ApiUsersService.updateUser(dto);
     res.json(result);
   }
@@ -43,7 +46,10 @@ class Controller {
     handlers: [requireToken, dtoValidator(AddressCreateDto)],
   })
   async createAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = { ...req.body, userId: req.userId };
+    const dto = {
+      ...req.body,
+      userId: req.userId,
+    };
     const result = await ApiUsersService.createAddress(dto);
     res.json(result);
   }

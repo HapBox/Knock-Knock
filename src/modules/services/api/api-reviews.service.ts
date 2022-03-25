@@ -16,7 +16,8 @@ export default class ApiReviewsService {
         message: 'Not found.',
       });
     }
-    return await review.update(dto);
+    await review.update(dto);
+    return review;
   }
 
   static async deleteReview(idReview: string) {

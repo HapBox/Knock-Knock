@@ -7,24 +7,29 @@ import { throwError } from '../../../utils/http-exception';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
 import { FilialUpdateDto } from '../../dto/filial-update.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
+import { StoreFilialDeleteDto } from '../../dto/storeFilial-delete.dto';
+import { StoreWorkerAddDto } from '../../dto/storeWorker-add.dto';
+import { StoreWorkerDeleteDto } from '../../dto/storeWorker-delete.dto';
 
 export default class SaStoresService {
   static async getStores() {
-    const storeList = await Store.findAll();
-
-    let result: Array<Object> = [];
-    storeList.forEach(async (store) => {
-      result.push({
-        store,
-        number: await Product.count({
-          where: {
-            storeId: store.id,
-          },
-        }),
-      });
+    const storeList = await Store.findAll({
+      include: [
+        {
+          model: Product,
+          duplicating: false,
+        },
+      ],
     });
 
-    return result;
+    const result: any[] = storeList.map((el) => {
+      return {
+        store: el.name,
+        count: el.productList.length,
+      };
+    });
+
+    return { storeList: result };
   }
 
   static async getStoreById(storeId: string) {
@@ -43,7 +48,7 @@ export default class SaStoresService {
       },
     });
 
-    return { store, productList };
+    return { store: store, productList: productList };
   }
 
   static async deleteStoreById(storeId: string) {
@@ -91,7 +96,7 @@ export default class SaStoresService {
       },
     });
 
-    return filialList;
+    return { filialList: filialList };
   }
 
   static async createStoreFilial(dto: FilialCreateDto) {
@@ -147,8 +152,8 @@ export default class SaStoresService {
     return address;
   }
 
-  static async deleteStoreFilial(storeId: string, filialId: string) {
-    const store = await Store.findByPk(storeId);
+  static async deleteStoreFilial(dto: StoreFilialDeleteDto) {
+    const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
       throwError({
@@ -157,7 +162,7 @@ export default class SaStoresService {
       });
     }
 
-    const filial = await Filial.findByPk(filialId);
+    const filial = await Filial.findByPk(dto.filialId);
 
     if (!filial) {
       throwError({
@@ -181,8 +186,8 @@ export default class SaStoresService {
     return { message: 'Delete succesfull' };
   }
 
-  static async addWorker(storeId: string, workerPhone: string) {
-    const store = await Store.findByPk(storeId);
+  static async addWorker(dto: StoreWorkerAddDto) {
+    const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
       throwError({
@@ -193,7 +198,7 @@ export default class SaStoresService {
 
     let user = await User.findOne({
       where: {
-        phone: workerPhone,
+        phone: dto.workerPhone,
       },
     });
 
@@ -212,13 +217,13 @@ export default class SaStoresService {
     }
 
     user.update({
-      workStoreId: storeId,
+      workStoreId: dto.storeId,
     });
     return user;
   }
 
-  static async removeWorker(storeId: string, workerId: string) {
-    const store = await Store.findByPk(storeId);
+  static async removeWorker(dto: StoreWorkerDeleteDto) {
+    const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
       throwError({
@@ -229,8 +234,8 @@ export default class SaStoresService {
 
     let user = await User.findOne({
       where: {
-        id: workerId,
-        workStoreId: storeId,
+        id: dto.workerId,
+        workStoreId: dto.storeId,
       },
     });
 

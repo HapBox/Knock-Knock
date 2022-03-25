@@ -9,7 +9,7 @@ import { OrderUpdateDto } from '../../dto/order-update.dto';
 export default class SaOrdersService {
   static async getOrders() {
     const orderList = await Order.findAll();
-    return orderList;
+    return { orderList: orderList };
   }
 
   static async getOrdersByStoreId(storeId: string) {
@@ -30,7 +30,7 @@ export default class SaOrdersService {
       },
     });
 
-    return orderList;
+    return { orderList: orderList };
   }
 
   static async getOrdersByFilialId(filialId: string) {
@@ -50,7 +50,7 @@ export default class SaOrdersService {
       },
     });
 
-    return orderList;
+    return { orderList: orderList };
   }
 
   static async getOrderById(orderId: string) {

@@ -11,7 +11,7 @@ export default class SaClientsService {
       },
     });
 
-    return clientList;
+    return { clientList: clientList };
   }
 
   static async getClientById(clientId: string) {

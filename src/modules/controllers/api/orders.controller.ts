@@ -3,7 +3,10 @@ import { ApiController, GET, PATCH, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import BaseRequest from '../../base/base.request';
+import { OrderCancelDto } from '../../dto/order-cancel.dto';
 import { OrderCreateDto } from '../../dto/order-create.dto';
+import { OrderGetDto } from '../../dto/order-get.dto';
+import { OrderAddressUpdateDto } from '../../dto/orderAddress-update.dto';
 import { RatingCreateDto } from '../../dto/rating-create.dto';
 import ApiOrdersService from '../../services/api/api-orders.service';
 
@@ -35,27 +38,41 @@ class Controller {
 
   @GET('/:id', {
     summary: 'Получение заказа по id',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(OrderGetDto)],
   })
   async getOrderById(req: BaseRequest, res: Response, next: NextFunction) {
-    const result = await ApiOrdersService.getOrderById(req.params.id, req.userId);
+    const dto: OrderGetDto = {
+      userId: req.userId,
+      orderId: req.params.id,
+    };
+    const result = await ApiOrdersService.getOrderById(dto);
     res.json(result);
   }
 
   @PATCH('/:orderId/addresses/:addressId', {
     summary: 'Изменение адреса в доставке',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(OrderAddressUpdateDto)],
   })
   async changeOrderAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    const result = await ApiOrdersService.changeAddress(req.params.orderId, req.userId, req.params.addressId);
+    const dto: OrderAddressUpdateDto = {
+      orderId: req.params.orderId,
+      userId: req.userId,
+      addressId: req.params.addressId,
+    };
+    const result = await ApiOrdersService.changeAddress(dto);
     res.json(result);
   }
 
   @PATCH('/:id/cancel', {
     summary: 'Отмена заказа',
+    handlers: [requireToken, dtoValidator(OrderCancelDto)],
   })
   async cancelOrder(req: BaseRequest, res: Response, next: NextFunction) {
-    const result = ApiOrdersService.cancelOrder(req.params.id, req.userId);
+    const dto: OrderCancelDto = {
+      userId: req.userId,
+      orderId: req.params.id,
+    };
+    const result = ApiOrdersService.cancelOrder(dto);
     res.json(result);
   }
 
@@ -64,7 +81,11 @@ class Controller {
     handlers: [requireToken, dtoValidator(RatingCreateDto)],
   })
   async createRating(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto: RatingCreateDto = { ...req.body, userId: req.userId, orderId: req.params.id };
+    const dto: RatingCreateDto = {
+      ...req.body,
+      userId: req.userId,
+      orderId: req.params.id,
+    };
     const result = await ApiOrdersService.createReview(dto);
     res.json(result);
   }

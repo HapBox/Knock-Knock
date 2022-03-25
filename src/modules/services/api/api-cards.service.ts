@@ -1,6 +1,7 @@
 import Card from '../../../database/models/final/card.model';
 import { throwError } from '../../../utils/http-exception';
 import { CardCreateDto } from '../../dto/card-create.dto';
+import { CardDeleteDto } from '../../dto/card-delete.dto';
 
 export default class ApiCardsService {
   static async getCards(userId: string) {
@@ -10,7 +11,7 @@ export default class ApiCardsService {
         isExist: true,
       },
     });
-    return cardList;
+    return { cardList: cardList };
   }
 
   static async createCard(dto: CardCreateDto) {
@@ -18,11 +19,11 @@ export default class ApiCardsService {
     return card;
   }
 
-  static async deleteCard(cardId: string, userId: string) {
+  static async deleteCard(dto:CardDeleteDto) {
     const card = await Card.findOne({
       where: {
-        userId: userId,
-        id: cardId,
+        userId: dto.userId,
+        id: dto.cardId,
         isExist: true,
       },
     });

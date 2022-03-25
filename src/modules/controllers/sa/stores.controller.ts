@@ -10,6 +10,9 @@ import BaseRequest from '../../base/base.request';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
 import { FilialUpdateDto } from '../../dto/filial-update.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
+import { StoreFilialDeleteDto } from '../../dto/storeFilial-delete.dto';
+import { StoreWorkerAddDto } from '../../dto/storeWorker-add.dto';
+import { StoreWorkerDeleteDto } from '../../dto/storeWorker-delete.dto';
 import SaStoresService from '../../services/sa/sa-stores.service';
 
 @ApiController('/sa/api/stores')
@@ -104,35 +107,41 @@ class Controller {
 
   @DELETE('/:storeId/filials/:filialId', {
     summary: 'Удаление филиала магазина',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(StoreFilialDeleteDto)],
   })
   async deleteStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
-    const storeId = req.params.id;
-    const filialId = req.params.filialId;
-    const result = await SaStoresService.deleteStoreFilial(storeId, filialId);
+    const dto: StoreFilialDeleteDto = {
+      filialId: req.params.filialId,
+      storeId: req.params.id,
+    };
+    const result = await SaStoresService.deleteStoreFilial(dto);
     res.json(result);
   }
 
   @PATCH('/:storeId/workers/:workerPhone/add', {
     summary: 'Добавление администратора магазина',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(StoreWorkerAddDto)],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async addWorker(req: BaseRequest, res: Response, next: NextFunction) {
-    const storeId = req.params.id;
-    const workerPhone = req.params.workerPhone;
-    const result = await SaStoresService.addWorker(storeId, workerPhone);
+    const dto: StoreWorkerAddDto = {
+      storeId: req.params.id,
+      workerPhone: req.params.workerPhone,
+    };
+    const result = await SaStoresService.addWorker(dto);
     res.json(result);
   }
 
   @PATCH('/:storeId/workers/:workerId/remove', {
     summary: 'Удаление администратора магазина',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(StoreWorkerDeleteDto)],
   })
   async removeWorker(req: BaseRequest, res: Response, next: NextFunction) {
-    const storeId = req.params.id;
-    const workerId = req.params.workerId;
-    const result = await SaStoresService.removeWorker(storeId, workerId);
+    const dto: StoreWorkerDeleteDto = {
+      storeId: req.params.id,
+      workerId: req.params.workerId,
+    };
+    const result = await SaStoresService.removeWorker(dto);
     res.json(result);
   }
 }

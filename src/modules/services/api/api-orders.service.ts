@@ -4,7 +4,10 @@ import Rating from '../../../database/models/final/rating.model';
 import Store from '../../../database/models/final/store.model';
 import { StatusTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
+import { OrderCancelDto } from '../../dto/order-cancel.dto';
 import { OrderCreateDto } from '../../dto/order-create.dto';
+import { OrderGetDto } from '../../dto/order-get.dto';
+import { OrderAddressUpdateDto } from '../../dto/orderAddress-update.dto';
 import { RatingCreateDto } from '../../dto/rating-create.dto';
 
 export default class ApiOrdersService {
@@ -14,7 +17,7 @@ export default class ApiOrdersService {
         userId,
       },
     });
-    return orderList;
+    return { orderList: orderList };
   }
 
   static async createOrder(dto: OrderCreateDto) {
@@ -22,21 +25,21 @@ export default class ApiOrdersService {
     return order;
   }
 
-  static async getOrderById(orderId: string, userId: string) {
+  static async getOrderById(dto: OrderGetDto) {
     const order = await Order.findOne({
       where: {
-        id: orderId,
-        userId: userId,
+        id: dto.orderId,
+        userId: dto.userId,
       },
     });
     return order;
   }
 
-  static async changeAddress(orderId: string, userId: string, addressId: string) {
+  static async changeAddress(dto: OrderAddressUpdateDto) {
     const order = await Order.findOne({
       where: {
-        id: orderId,
-        userId: userId,
+        id: dto.orderId,
+        userId: dto.userId,
       },
     });
     if (!order) {
@@ -45,14 +48,17 @@ export default class ApiOrdersService {
         message: 'Not found.',
       });
     }
-    return await order.update({ addressId: addressId });
+
+    await order.update({ addressId: dto.addressId });
+
+    return order;
   }
 
-  static async cancelOrder(orderId: string, userId: string) {
+  static async cancelOrder(dto: OrderCancelDto) {
     const order = await Order.findOne({
       where: {
-        id: orderId,
-        userId: userId,
+        id: dto.orderId,
+        userId: dto.userId,
       },
     });
     if (!order) {
@@ -61,7 +67,9 @@ export default class ApiOrdersService {
         message: 'Not found.',
       });
     }
-    return await order.update({ status: StatusTypes.CANCELED });
+    await order.update({ status: StatusTypes.CANCELED });
+
+    return order;
   }
 
   static async createReview(dto: RatingCreateDto) {

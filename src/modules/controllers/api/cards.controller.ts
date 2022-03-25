@@ -4,6 +4,7 @@ import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import BaseRequest from '../../base/base.request';
 import { CardCreateDto } from '../../dto/card-create.dto';
+import { CardDeleteDto } from '../../dto/card-delete.dto';
 import ApiCardsService from '../../services/api/api-cards.service';
 
 @ApiController('/api/cards')
@@ -29,10 +30,14 @@ class Controller {
 
   @DELETE('/:id', {
     summary: 'Удаляет карту',
-    handlers: [requireToken],
+    handlers: [requireToken, dtoValidator(CardDeleteDto)],
   })
   async deleteCard(req: BaseRequest, res: Response, next: NextFunction) {
-    const result = await ApiCardsService.deleteCard(req.params.id, req.userId);
+    const dto: CardDeleteDto = {
+      userId: req.userId,
+      cardId: req.params.id,
+    };
+    const result = await ApiCardsService.deleteCard(dto);
     res.json(result);
   }
 }

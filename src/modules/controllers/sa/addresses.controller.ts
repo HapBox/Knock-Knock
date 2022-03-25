@@ -19,7 +19,9 @@ class Controller {
     responses: [SwaggerUtils.body200(SAAddressesModels.resAddressInfo)],
   })
   async createAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto: AddressCreateDto = req.body;
+    const dto: AddressCreateDto = {
+      ...req.body,
+    };
     const result = await SaAddressesService.createAddress(dto);
     res.json(result);
   }
@@ -31,7 +33,10 @@ class Controller {
     responses: [SwaggerUtils.body200(SAAddressesModels.resAddressInfo)],
   })
   async patchAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto: AddressUpdateDto = { ...req.body, addressId: req.params.id };
+    const dto: AddressUpdateDto = {
+      ...req.body,
+      addressId: req.params.id,
+    };
     const result = await SaAddressesService.patchAddress(dto);
     res.json(result);
   }

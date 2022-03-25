@@ -1,8 +1,10 @@
 import { NextFunction, Response } from 'express';
 import { ApiController, GET } from '../../../core/api-decorators';
+import { dtoValidator } from '../../../middlewares/validate';
 import SAProductsModels from '../../../swagger/swagger-models/sa/products';
 import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
+import { StoreFilialGetDto } from '../../dto/storeFilial-get.dto';
 import ApiStoresService from '../../services/api/api-stores.service';
 
 @ApiController('/api/stores')
@@ -42,9 +44,14 @@ class Controller {
 
   @GET('/:storeId/filials/:filialId', {
     summary: 'Получение информации о филиале',
+    handlers: [dtoValidator(StoreFilialGetDto)]
   })
   async getStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
-    const result = await ApiStoresService.getFilialById(req.params.filialId, req.params.storeId);
+    const dto: StoreFilialGetDto = {
+      filialId: req.params.filialId,
+      storeId: req.params.storeId,
+    };
+    const result = await ApiStoresService.getFilialById(dto);
     res.json(result);
   }
 

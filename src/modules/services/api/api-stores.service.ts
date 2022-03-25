@@ -5,6 +5,7 @@ import Rating from '../../../database/models/final/rating.model';
 import Store from '../../../database/models/final/store.model';
 import User from '../../../database/models/final/user.model';
 import { throwError } from '../../../utils/http-exception';
+import { StoreFilialGetDto } from '../../dto/storeFilial-get.dto';
 
 export default class ApiStoresService {
   static async getStoresByCategory(categoryId: string) {
@@ -14,7 +15,7 @@ export default class ApiStoresService {
         categoryId,
       },
     });
-    return stores;
+    return { storeList: stores };
   }
 
   static async getStoresBySearch(searchValue: string) {
@@ -25,7 +26,7 @@ export default class ApiStoresService {
         },
       },
     });
-    return stores;
+    return { storeList: stores };
   }
 
   static async getStoreById(storeId: string) {
@@ -42,7 +43,7 @@ export default class ApiStoresService {
         storeId,
       },
     });
-    return { store, productList };
+    return { store: store, productList: productList };
   }
 
   static async getFilialList(storeId: string) {
@@ -51,14 +52,14 @@ export default class ApiStoresService {
         storeId: storeId,
       },
     });
-    return filialList;
+    return { filialList: filialList };
   }
 
-  static async getFilialById(filialId: string, storeId: string) {
+  static async getFilialById(dto: StoreFilialGetDto) {
     const filial = await Filial.findOne({
       where: {
-        id: filialId,
-        storeId: storeId,
+        id: dto.filialId,
+        storeId: dto.storeId,
       },
     });
     if (!filial) {
@@ -83,7 +84,7 @@ export default class ApiStoresService {
         },
       ],
     });
-    return reviewList;
+    return { reviewList: reviewList };
   }
 
   static async getProductsByCategory(categoryId: string, storeId: string) {
@@ -93,7 +94,7 @@ export default class ApiStoresService {
         categoryId,
       },
     });
-    return products;
+    return { productList: products };
   }
 
   static async getProductsBySearch(searchValue: string, storeId: string) {
@@ -105,7 +106,7 @@ export default class ApiStoresService {
         storeId,
       },
     });
-    return products;
+    return { productList: products };
   }
 
   static async getProductsList(storeId: string) {
@@ -114,7 +115,7 @@ export default class ApiStoresService {
         storeId,
       },
     });
-    return productList;
+    return { productList: productList };
   }
 
   static async getProductById(productId: string) {

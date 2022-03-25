@@ -27,7 +27,8 @@ export default class ApiUsersService {
         message: 'Not found.',
       });
     }
-    return await user.update(dto);
+    await user.update(dto);
+    return user;
   }
 
   static async getUserRatingList(userId: string) {
@@ -42,7 +43,7 @@ export default class ApiUsersService {
         },
       ],
     });
-    return ratingList;
+    return { ratingList: ratingList };
   }
 
   static async getAddressList(userId: string) {
@@ -51,7 +52,7 @@ export default class ApiUsersService {
         userId: userId,
       },
     });
-    return addressList;
+    return { addressList: addressList };
   }
 
   static async createAddress(dto: AddressCreateDto) {
@@ -67,6 +68,7 @@ export default class ApiUsersService {
         message: 'Not found.',
       });
     }
-    return await address.update(dto);
+    await address.update(dto);
+    return address;
   }
 }

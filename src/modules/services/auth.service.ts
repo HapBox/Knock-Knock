@@ -45,7 +45,7 @@ export default class AuthService {
       });
     }
 
-    smsConfirm.destroy();
+    await smsConfirm.destroy();
 
     let user = await User.findOne({
       where: {

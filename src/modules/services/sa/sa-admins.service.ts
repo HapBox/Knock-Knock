@@ -12,7 +12,7 @@ export default class SaAdminsService {
       },
     });
 
-    return adminList;
+    return {adminList: adminList};
   }
 
   static async getAdminById(adminId: string) {

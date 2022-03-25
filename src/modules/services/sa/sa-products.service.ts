@@ -17,7 +17,7 @@ export default class SaProductsService {
         },
       ],
     });
-    return productList;
+    return { productList: productList };
   }
 
   static async getProductsByCategory(categoryName: string) {
@@ -46,7 +46,7 @@ export default class SaProductsService {
       ],
     });
 
-    return productList;
+    return { productList: productList };
   }
 
   static async getProductsBySearchValue(searchValue: string) {
@@ -64,7 +64,7 @@ export default class SaProductsService {
       ],
     });
 
-    return productList;
+    return { productList: productList };
   }
 
   static async getProductsByStoreId(storeId: string) {
@@ -80,25 +80,25 @@ export default class SaProductsService {
       ],
     });
 
-    return productList;
+    return { productList: productList };
   }
 
   static async getCategoriesSummary() {
     const categories = await Category.findAll({
-      attributes: ['id', 'name'],
+      include: [
+        {
+          model: Product,
+          duplicating: false,
+        },
+      ],
     });
-    let result: Array<Object> = [];
-    categories.forEach(async (category) => {
-      result.push({
-        category: category.name,
-        number: await Product.count({
-          where: {
-            categoryId: category.id,
-          },
-        }),
-      });
+    let result: any[] = categories.map((el) => {
+      return {
+        name: el.name,
+        count: el.productList.length,
+      };
     });
-    return result;
+    return { categoriesSummary: result };
   }
 
   static async getProductById(productId: string) {
