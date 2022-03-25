@@ -9,12 +9,20 @@ import { StoreFilialGetDto } from '../../dto/storeFilial-get.dto';
 
 export default class ApiStoresService {
   static async getStoresByCategory(categoryId: string) {
-    //переделать и продумать нормально
     const stores = await Store.findAll({
-      where: {
-        categoryId,
-      },
+      include: [
+        {
+          model: Product,
+          duplicating: false,
+          where: {
+            categoryId,
+          },
+          limit: 1,
+          required: true,
+        },
+      ],
     });
+
     return { storeList: stores };
   }
 
