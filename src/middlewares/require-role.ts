@@ -26,7 +26,7 @@ export const requireRole = async (req: BaseRequest, res: Response, next: NextFun
   }
 
   if (user.role === RoleTypes.STOREWORKER) {
-    req.workStoreId = user.workStoreId;
+    req.workStoreId = user.role;
   }
 
   req.userRole = user.workStoreId;
