@@ -4,7 +4,7 @@ import BaseRequest from '../modules/base/base.request';
 import { RoleTypes } from '../utils/constants';
 import { throwError } from '../utils/http-exception';
 
-export const requireToken = async (req: BaseRequest, res: Response, next: NextFunction) => {
+export const requireRole = async (req: BaseRequest, res: Response, next: NextFunction) => {
   const user = await User.findOne({
     where: {
       id: req.userId,
