@@ -14,7 +14,7 @@ export default class ApiOrdersService {
   static async getOrders(userId: string) {
     const orderList = await Order.findAll({
       where: {
-        userId,
+        userId: userId,
       },
     });
     return { orderList: orderList };

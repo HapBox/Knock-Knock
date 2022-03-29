@@ -2,6 +2,8 @@ import { NextFunction, Response } from 'express';
 import { ApiController, DELETE, GET, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
+import APICardsModels from '../../../swagger/swagger-models/api/cards';
+import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
 import { CardCreateDto } from '../../dto/card-create.dto';
 import { CardDeleteDto } from '../../dto/card-delete.dto';
@@ -12,6 +14,8 @@ class Controller {
   @POST('/', {
     summary: 'Создание новой карты пользователя',
     handlers: [requireToken, dtoValidator(CardCreateDto)],
+    body: APICardsModels.reqCardCreate,
+    responses: [SwaggerUtils.body200(APICardsModels.resCardInfo)],
   })
   async createCard(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: CardCreateDto = { ...req.body, userId: req.userId };
@@ -22,6 +26,7 @@ class Controller {
   @GET('/', {
     summary: 'Получение списка карт',
     handlers: [requireToken],
+    responses: [SwaggerUtils.body200(APICardsModels.resCardInfoList)],
   })
   async getCards(req: BaseRequest, res: Response, next: NextFunction) {
     const result = await ApiCardsService.getCards(req.userId);

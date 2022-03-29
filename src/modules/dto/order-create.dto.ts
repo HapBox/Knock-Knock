@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsUUID, IsDate, IsNotEmpty, ValidateNested, IsArray, ArrayNotEmpty, IsNotEmptyObject } from 'class-validator';
+import { IsEnum, IsUUID, IsDate, IsNotEmpty, ValidateNested, IsArray, ArrayNotEmpty, IsNotEmptyObject, IsNumber } from 'class-validator';
 import { PaymentTypes } from '../../utils/constants';
 import { BaseDto } from '../base/base.dto';
 import { AddressCreateDto } from './address-create.dto';
@@ -26,6 +26,10 @@ export class OrderCreateDto extends BaseDto {
 
   @IsDate() //может быть прямо сейчас
   dateTo!: Date;
+
+  @IsNotEmpty()
+  @IsNumber()
+  countPersons!: number;
 
   @ValidateNested() //список продуктов в заказе
   @IsArray()

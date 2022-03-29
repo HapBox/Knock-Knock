@@ -19,6 +19,7 @@ export default class SAOrderModels {
     userAddress: SAAddressesModels.reqAddressCreate,
     payment: Object.values(PaymentTypes),
     dateTo: '27.02.2022',
+    countPersons: 4,
     productList: [SAOrderModels.reqProductOrderCreate],
   };
 
@@ -27,7 +28,8 @@ export default class SAOrderModels {
     store: SAStoresModels.resStoreInfo,
     price: 'Цена',
     status: 'Статус',
-    dateTo: 'На какое время заказ',
+    dateTo: '27.02.2022',
+    countPersons: 4,
     productList: [SAOrderModels.resProductOrderCreate],
     address: SAAddressesModels.resAddressInfo
   };

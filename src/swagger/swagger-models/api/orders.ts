@@ -19,20 +19,22 @@ export default class APIOrderModels {
     payment: Object.values(PaymentTypes),
     'cardId?': 'UUID',
     dateTo: '27.02.2022',
+    countPersons: 4,
     productList: [APIOrderModels.reqProductOrderCreate],
   };
 
   static resOrderInfo = {
     id: 'UUID',
     store: APIStoresModels.resStoreInfo,
-    price: 'Цена',
+    price: 5236,
     status: 'Статус',
-    dateTo: 'На какое время заказ',
+    dateTo: '21.03.2022',
+    countPersons: 4,
     productList: [APIOrderModels.resProductOrderCreate],
     address: APIAddressesModels.resAddressInfo
   };
 
-  static resOrdersInfo = {
+  static resOrderInfoList = {
     orderList: [APIOrderModels.resOrderInfo],
   };
 }

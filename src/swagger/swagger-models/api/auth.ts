@@ -7,4 +7,8 @@ export default class APIAuthModels {
     phone: '79287309100',
     code: '123456',
   };
+
+  static resPhoneAuthConfirm = {
+    accessToken: 'access token',
+  };
 }

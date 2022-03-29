@@ -2,6 +2,8 @@ import { NextFunction, Response } from 'express';
 import { ApiController, GET, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
+import APIAuthModels from '../../../swagger/swagger-models/api/auth';
+import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
 import { PhoneAuthDto } from '../../dto/phone-auth.dto';
 import { PhoneConfirmDto } from '../../dto/phone-confirm.dto';
@@ -12,6 +14,7 @@ class Controller {
   @POST('/phone', {
     summary: 'Авторизация по номеру телефона (начало)',
     handlers: [dtoValidator(PhoneAuthDto)],
+    body: APIAuthModels.reqPhoneAuth,
   })
   async phoneAuthStart(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: PhoneAuthDto = req.body;
@@ -22,6 +25,8 @@ class Controller {
   @POST('/phone/confirm', {
     summary: 'Авторизация по номеру телефона (завершение)',
     handlers: [dtoValidator(PhoneConfirmDto)],
+    responses: [SwaggerUtils.body200(APIAuthModels.resPhoneAuthConfirm)],
+    body: APIAuthModels.reqPhoneAuthConfirm,
   })
   async phoneAuthConfirm(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: PhoneConfirmDto = req.body;

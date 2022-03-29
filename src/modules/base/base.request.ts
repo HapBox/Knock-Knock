@@ -5,4 +5,6 @@ export default interface BaseRequest extends Request {
   value: string;
   token: string;
   userId: string;
+  userRole: string;
+  workStoreId: string;
 }

@@ -1,6 +1,10 @@
 import { NextFunction, Response } from 'express';
 import { ApiController, GET } from '../../../core/api-decorators';
 import { dtoValidator } from '../../../middlewares/validate';
+import APIFilialModels from '../../../swagger/swagger-models/api/filials';
+import APIProductsModels from '../../../swagger/swagger-models/api/products';
+import APIRatingModels from '../../../swagger/swagger-models/api/ratings';
+import APIStoresModels from '../../../swagger/swagger-models/api/stores';
 import SAProductsModels from '../../../swagger/swagger-models/sa/products';
 import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
@@ -15,6 +19,7 @@ class Controller {
       'category?': 'Название категории',
       'searchValue?': 'Название тега поиска',
     },
+    responses: [SwaggerUtils.body200(APIStoresModels.resStoreInfoList)],
   })
   async getStores(req: BaseRequest, res: Response, next: NextFunction) {
     let result;
@@ -28,6 +33,7 @@ class Controller {
 
   @GET('/:id', {
     summary: 'Получение информации о магазине и списка продуктов по id',
+    responses: [SwaggerUtils.body200(APIStoresModels.resStoreFullInfo)],
   })
   async getStoreById(req: BaseRequest, res: Response, next: NextFunction) {
     const result = await ApiStoresService.getStoreById(req.params.id);
@@ -36,6 +42,7 @@ class Controller {
 
   @GET('/:id/filials', {
     summary: 'Получение списка филиалов в городе',
+    responses: [SwaggerUtils.body200(APIFilialModels.resFilialInfoList)],
   })
   async getStoreFilialList(req: BaseRequest, res: Response, next: NextFunction) {
     const result = await ApiStoresService.getFilialList(req.params.id);
@@ -44,7 +51,7 @@ class Controller {
 
   @GET('/:storeId/filials/:filialId', {
     summary: 'Получение информации о филиале',
-    handlers: [dtoValidator(StoreFilialGetDto)]
+    responses: [SwaggerUtils.body200(APIFilialModels.resFilialShortInfo)],
   })
   async getStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: StoreFilialGetDto = {
@@ -57,6 +64,7 @@ class Controller {
 
   @GET('/:id/reviews', {
     summary: 'Получение всех отзывов на магазин',
+    responses: [SwaggerUtils.body200(APIRatingModels.resRatingInfoList)],
   })
   async getRating(req: BaseRequest, res: Response, next: NextFunction) {
     const result = await ApiStoresService.getReviewList(req.params.id);
@@ -69,6 +77,7 @@ class Controller {
       'category?': 'Название категории',
       'searchValue?': 'название тега',
     },
+    responses: [SwaggerUtils.body200(APIProductsModels.resProductInfoList)],
   })
   async getStoreProducts(req: BaseRequest, res: Response, next: NextFunction) {
     let result;
