@@ -1,3 +1,4 @@
+import { FileTypes } from '../../../utils/constants';
 import APICategoriesModels from './categories';
 
 export default class APIProductsModels {
@@ -5,6 +6,15 @@ export default class APIProductsModels {
     id: 'UUID',
     discountPercent: 15,
     dateTo: '22.05.2022',
+  };
+
+  static resFile = {
+    id: 'UUID',
+    extension: 'jpg,png...',
+    size: 1234,
+    originalName: 'картинка1234.jpg',
+    type: Object.values(FileTypes).join('/'),
+    url: 'https://....',
   };
 
   static resProductInfo = {
@@ -16,7 +26,7 @@ export default class APIProductsModels {
     promotionId: 'UUID',
     category: APICategoriesModels.resCategoryInfo,
     categoryId: 'UUID',
-    //image
+    image: APIProductsModels.resFile,
   };
 
   static resProductInfoList = {
