@@ -1,4 +1,5 @@
 import SACategoriesModels from './categories';
+import SAFileModels from './file-db';
 import SAPromotionModels from './promotions';
 
 export default class SAProductsModels {
@@ -8,14 +9,14 @@ export default class SAProductsModels {
     price: 123,
     categoryId: 'UUID',
     filialId: 'UUID',
-    //image
+    image: SAFileModels.resFileDB,
   };
 
   static reqProductUpdate = {
     name: 'Название продукта',
     description: 'Описание продукта',
     price: 123,
-    //image
+    image: SAFileModels.resFileDB,
   };
 
   static resProductInfo = {
@@ -27,7 +28,7 @@ export default class SAProductsModels {
     'promotionId?': 'UUID',
     category: SACategoriesModels.resCategoryInfo,
     categoryId: 'UUID',
-    //image
+    image: SAFileModels.resFileDB,
   };
 
   static resProductInfoList = {

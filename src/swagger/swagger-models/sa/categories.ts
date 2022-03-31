@@ -1,13 +1,15 @@
+import SAFileModels from "./file-db";
+
 export default class SACategoriesModels {
   static reqCategoryCreate = {
     name: 'Название категории',
-    //image
+    image: SAFileModels.resFileDB,
   };
 
   static resCategoryInfo = {
     id: 'UUID',
     name: 'Название категории',
-    //image
+    image: SAFileModels.resFileDB,
   };
 
   static resCategoryInfoList = {
