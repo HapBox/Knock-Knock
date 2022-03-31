@@ -5,11 +5,7 @@ import { RoleTypes } from '../utils/constants';
 import { throwError } from '../utils/http-exception';
 
 export const requireRole = async (req: BaseRequest, res: Response, next: NextFunction) => {
-  const user = await User.findOne({
-    where: {
-      id: req.userId,
-    },
-  });
+  const user = await User.findByPk(req.userId);
 
   if (!user) {
     throwError({
@@ -26,9 +22,9 @@ export const requireRole = async (req: BaseRequest, res: Response, next: NextFun
   }
 
   if (user.role === RoleTypes.STOREWORKER) {
-    req.workStoreId = user.role;
+    req.workStoreId = user.workStoreId;
   }
 
-  req.userRole = user.workStoreId;
+  req.userRole = user.role;
   next();
 };
