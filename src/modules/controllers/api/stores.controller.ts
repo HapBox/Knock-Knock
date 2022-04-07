@@ -16,18 +16,14 @@ class Controller {
   @GET('/', {
     summary: 'Получение списка магазинов',
     query: {
+      city: 'Название города',
       'category?': 'Название категории',
       'searchValue?': 'Название тега поиска',
     },
     responses: [SwaggerUtils.body200(APIStoresModels.resStoreInfoList)],
   })
   async getStores(req: BaseRequest, res: Response, next: NextFunction) {
-    let result;
-    if (req.query.category) {
-      result = await ApiStoresService.getStoresByCategory(String(req.query.category));
-    } else if (req.query.searchValue) {
-      result = await ApiStoresService.getStoresBySearch(String(req.query.searchValue));
-    }
+    const result = await ApiStoresService.getStores(req.query); 
     res.json(result);
   }
 

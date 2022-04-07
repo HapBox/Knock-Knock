@@ -1,4 +1,7 @@
+import { ParsedQs } from 'qs';
 import { Op } from 'sequelize';
+import Address from '../../../database/models/final/address.model';
+import FileDB from '../../../database/models/final/file-db.model';
 import Filial from '../../../database/models/final/filial.model';
 import Product from '../../../database/models/final/product.model';
 import Rating from '../../../database/models/final/rating.model';
@@ -8,32 +11,53 @@ import { throwError } from '../../../utils/http-exception';
 import { StoreFilialGetDto } from '../../dto/storeFilial-get.dto';
 
 export default class ApiStoresService {
-  static async getStoresByCategory(categoryId: string) {
-    const stores = await Store.findAll({
-      include: [
-        {
-          model: Product,
-          duplicating: false,
-          where: {
-            categoryId,
+  static async getStores(query: ParsedQs) {
+    let stores;
+    if (query.category) {
+      stores = await Store.findAll({
+        include: [
+          {
+            model: Product,
+            duplicating: false,
+            where: {
+              categoryId: query.category,
+            },
+            limit: 1,
+            required: true,
           },
-          limit: 1,
-          required: true,
+          {
+            model: FileDB,
+            duplicating: false,
+          },
+        ],
+      });
+    } else if (query.searchValue) {
+      stores = await Store.findAll({
+        where: {
+          name: {
+            [Op.iLike]: '%' + query.searchValue + '%',
+          },
         },
-      ],
-    });
-
-    return { storeList: stores };
-  }
-
-  static async getStoresBySearch(searchValue: string) {
-    const stores = await Store.findAll({
-      where: {
-        name: {
-          [Op.iLike]: '%' + searchValue + '%',
-        },
-      },
-    });
+        include: [
+          {
+            model: Filial,
+            duplicating: false,
+            include: [
+              {
+                model: Address,
+                where: {
+                  city: query.city,
+                },
+              },
+            ],
+          },
+          {
+            model: FileDB,
+            duplicating: false,
+          },
+        ],
+      });
+    }
     return { storeList: stores };
   }
 
