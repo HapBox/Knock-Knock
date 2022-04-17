@@ -6,6 +6,7 @@ import User from '../../../database/models/final/user.model';
 import { throwError } from '../../../utils/http-exception';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
 import { FilialUpdateDto } from '../../dto/filial-update.dto';
+import { StoreCreateDto } from '../../dto/store-create.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
 import { StoreFilialDeleteDto } from '../../dto/storeFilial-delete.dto';
 import { StoreWorkerAddDto } from '../../dto/storeWorker-add.dto';
@@ -30,6 +31,11 @@ export default class SaStoresService {
     });
 
     return { storeList: result };
+  }
+
+  static async createStore(dto: StoreCreateDto) {
+    const store = await Store.create({ ...dto });
+    return store;
   }
 
   static async getStoreById(storeId: string) {
