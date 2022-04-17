@@ -34,6 +34,7 @@ export default class SaStoresService {
   }
 
   static async createStore(dto: StoreCreateDto) {
+    
     const store = await Store.create({ ...dto });
     return store;
   }

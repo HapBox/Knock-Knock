@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { ApiController, DELETE, GET, PATCH, POST } from '../../../core/api-decorators';
+import { requireRole } from '../../../middlewares/require-role';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import SAFilialModels from '../../../swagger/swagger-models/sa/filials';
@@ -9,6 +10,7 @@ import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
 import { FilialUpdateDto } from '../../dto/filial-update.dto';
+import { StoreCreateDto } from '../../dto/store-create.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
 import { StoreFilialDeleteDto } from '../../dto/storeFilial-delete.dto';
 import { StoreWorkerAddDto } from '../../dto/storeWorker-add.dto';
@@ -29,11 +31,14 @@ class Controller {
 
   @POST('/', {
     summary: 'Создание магазина',
-    handlers: [requireToken],
-    responses: [SwaggerUtils.body200(SAStoresModels.resStoreInfoList)],
+    handlers: [requireToken, requireRole],
+    body: SAStoresModels.reqStoreCreate,
+    responses: [SwaggerUtils.body200(SAStoresModels.resStoreInfo)],
   })
   async createStore(req: BaseRequest, res: Response, next: NextFunction) {
-    let result; //Сделать сервис создания 
+    const dto: StoreCreateDto = req.body;
+    dto.userRole = req.userRole;
+    const result = await SaStoresService.createStore(dto); 
     res.json(result);
   }
 
