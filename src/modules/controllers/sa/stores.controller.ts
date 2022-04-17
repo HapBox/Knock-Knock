@@ -27,6 +27,16 @@ class Controller {
     res.json(result);
   }
 
+  @POST('/', {
+    summary: 'Создание магазина',
+    handlers: [requireToken],
+    responses: [SwaggerUtils.body200(SAStoresModels.resStoreInfoList)],
+  })
+  async createStore(req: BaseRequest, res: Response, next: NextFunction) {
+    let result; //Сделать сервис создания 
+    res.json(result);
+  }
+
   @GET('/:id', {
     summary: 'Получение информации о магазине и списка продуктов по id',
     handlers: [requireToken],
