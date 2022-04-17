@@ -5,7 +5,7 @@ import { BaseDto } from '../base/base.dto';
 export class StoreCreateDto extends BaseDto {
   @IsEnum(RoleTypes)
   @IsNotEmpty()
-  userRole!: string;
+  userRole?: string;
 
   @IsString()
   @IsNotEmpty()
