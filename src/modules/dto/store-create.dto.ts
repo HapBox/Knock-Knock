@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsUUID} from 'class-validator';
 import { RoleTypes } from '../../utils/constants';
 import { BaseDto } from '../base/base.dto';
 
@@ -15,5 +15,7 @@ export class StoreCreateDto extends BaseDto {
   @IsNotEmpty()
   phone!: string;
 
-  //Фото продумать....
+  @IsUUID(4)
+  @IsNotEmpty()
+  imageId!: string;
 }

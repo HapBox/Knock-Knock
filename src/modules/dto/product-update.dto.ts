@@ -21,5 +21,7 @@ export class ProductUpdateDto extends BaseDto {
   @IsUUID(4)
   categoryId!: string;
 
-  //фото....
+  @IsUUID(4)
+  @IsNotEmpty()
+  imageId!: string;
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class CategoryCreateDto extends BaseDto {
@@ -6,5 +6,7 @@ export class CategoryCreateDto extends BaseDto {
   @IsString()
   name!: string;
 
-  //фото.....
+  @IsUUID(4)
+  @IsNotEmpty()
+  imageId!: string;
 }

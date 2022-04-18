@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class StoreUpdateDto extends BaseDto {
@@ -12,5 +12,7 @@ export class StoreUpdateDto extends BaseDto {
   @IsString()
   phone!: string;
 
-  //фото.............
+  @IsUUID(4)
+  @IsNotEmpty()
+  imageId!: string;
 }
