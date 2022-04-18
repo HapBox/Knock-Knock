@@ -3,26 +3,43 @@ import Filial from '../../../database/models/final/filial.model';
 import Product from '../../../database/models/final/product.model';
 import Store from '../../../database/models/final/store.model';
 import User from '../../../database/models/final/user.model';
+import { RoleTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
+import { BaseDto } from '../../base/base.dto';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
 import { FilialUpdateDto } from '../../dto/filial-update.dto';
 import { StoreCreateDto } from '../../dto/store-create.dto';
+import { StoreGetDeleteOneDto } from '../../dto/store-get-delete-one.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
 import { StoreFilialDeleteDto } from '../../dto/storeFilial-delete.dto';
 import { StoreWorkerAddDto } from '../../dto/storeWorker-add.dto';
 import { StoreWorkerDeleteDto } from '../../dto/storeWorker-delete.dto';
 
 export default class SaStoresService {
-  static async getStores() {
-    const storeList = await Store.findAll({
-      include: [
-        {
-          model: Product,
-          duplicating: false,
+  static async getStores(dto: BaseDto) {
+    let storeList;
+    if (dto.userRole === RoleTypes.ADMIN) {
+      storeList = await Store.findAll({
+        include: [
+          {
+            model: Product,
+            duplicating: false,
+          },
+        ],
+      });
+    } else {
+      storeList = await Store.findAll({
+        where: {
+          id: dto.workStoreId,
         },
-      ],
-    });
-
+        include: [
+          {
+            model: Product,
+            duplicating: false,
+          },
+        ],
+      });
+    }
     const result: any[] = storeList.map((el) => {
       return {
         store: el.name,
@@ -34,32 +51,47 @@ export default class SaStoresService {
   }
 
   static async createStore(dto: StoreCreateDto) {
-    
+    if (dto.userRole !== RoleTypes.ADMIN) {
+      throwError({
+        statusCode: 403,
+        message: 'You are not admin',
+      });
+    }
     const store = await Store.create({ ...dto });
     return store;
   }
 
-  static async getStoreById(storeId: string) {
-    const store = await Store.findByPk(storeId);
+  static async getStoreById(dto: StoreGetDeleteOneDto) {
+    if (dto.userRole !== RoleTypes.ADMIN && dto.workStoreId !== dto.workStoreId) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
 
+    const store = await Store.findByPk(dto.storeId);
     if (!store) {
       throwError({
         statusCode: 404,
         message: 'Store not found',
       });
     }
-
     const productList = await Product.findAll({
       where: {
-        storeId,
+        storeId: dto.storeId,
       },
     });
-
     return { store: store, productList: productList };
   }
 
-  static async deleteStoreById(storeId: string) {
-    const store = await Store.findByPk(storeId);
+  static async deleteStoreById(dto: StoreGetDeleteOneDto) {
+    if (dto.userRole !== RoleTypes.ADMIN) {
+      throwError({
+        statusCode: 403,
+        message: 'You are not admin',
+      });
+    }
+    const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
       throwError({
@@ -67,12 +99,17 @@ export default class SaStoresService {
         message: 'Store not found',
       });
     }
-
     await store.destroy();
     return { message: 'Delete succesfull' };
   }
 
   static async updateStoreById(dto: StoreUpdateDto) {
+    if (dto.userRole !== RoleTypes.ADMIN && dto.workStoreId !== dto.workStoreId) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
     let store = await Store.findByPk(dto.storeId);
 
     if (!store) {
@@ -87,8 +124,14 @@ export default class SaStoresService {
     return store;
   }
 
-  static async getStoreFilials(storeId: string) {
-    const store = await Store.findByPk(storeId);
+  static async getStoreFilials(dto: StoreGetDeleteOneDto) {
+    if (dto.userRole !== RoleTypes.ADMIN && dto.workStoreId !== dto.workStoreId) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
+    const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
       throwError({
@@ -96,17 +139,24 @@ export default class SaStoresService {
         message: 'Store not found',
       });
     }
-
     const filialList = await Filial.findAll({
       where: {
-        storeId: storeId,
+        storeId: dto.storeId,
+      },
+      include: {
+        model: Address,
       },
     });
-
     return { filialList: filialList };
   }
 
   static async createStoreFilial(dto: FilialCreateDto) {
+    if (dto.userRole !== RoleTypes.ADMIN && dto.workStoreId !== dto.workStoreId) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
     const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
@@ -116,7 +166,7 @@ export default class SaStoresService {
       });
     }
 
-    const address = await Address.create({
+    const address = await Address.create({ //хзхз
       ...dto.address,
     });
 
@@ -129,6 +179,12 @@ export default class SaStoresService {
   }
 
   static async updateStoreFilial(dto: FilialUpdateDto) {
+    if (dto.userRole !== RoleTypes.ADMIN && dto.workStoreId !== dto.workStoreId) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
     const store = await Store.findByPk(dto.storeId);
 
     if (!store) {
@@ -160,8 +216,14 @@ export default class SaStoresService {
   }
 
   static async deleteStoreFilial(dto: StoreFilialDeleteDto) {
-    const store = await Store.findByPk(dto.storeId);
+    if (dto.userRole !== RoleTypes.ADMIN && dto.workStoreId !== dto.workStoreId) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
 
+    const store = await Store.findByPk(dto.storeId);
     if (!store) {
       throwError({
         statusCode: 404,
@@ -170,7 +232,6 @@ export default class SaStoresService {
     }
 
     const filial = await Filial.findByPk(dto.filialId);
-
     if (!filial) {
       throwError({
         statusCode: 404,
@@ -179,7 +240,6 @@ export default class SaStoresService {
     }
 
     const address = await Address.findByPk(filial.addressId);
-
     if (!address) {
       throwError({
         statusCode: 404,
@@ -187,15 +247,20 @@ export default class SaStoresService {
       });
     }
 
-    await address?.destroy();
+    await address.destroy();
     await filial.destroy();
-
     return { message: 'Delete succesfull' };
   }
 
   static async addWorker(dto: StoreWorkerAddDto) {
-    const store = await Store.findByPk(dto.storeId);
+    if (dto.userRole  !== RoleTypes.ADMIN) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
 
+    const store = await Store.findByPk(dto.storeId);
     if (!store) {
       throwError({
         statusCode: 404,
@@ -230,8 +295,14 @@ export default class SaStoresService {
   }
 
   static async removeWorker(dto: StoreWorkerDeleteDto) {
-    const store = await Store.findByPk(dto.storeId);
+    if (dto.userRole  !== RoleTypes.ADMIN) {
+      throwError({
+        statusCode: 403,
+        message: 'Access denied',
+      });
+    }
 
+    const store = await Store.findByPk(dto.storeId);
     if (!store) {
       throwError({
         statusCode: 404,
@@ -245,7 +316,6 @@ export default class SaStoresService {
         workStoreId: dto.storeId,
       },
     });
-
     if (!user) {
       throwError({
         statusCode: 404,
@@ -256,7 +326,6 @@ export default class SaStoresService {
     user.update({
       workStoreId: null,
     });
-
     return { message: 'Worker removed' };
   }
 }
