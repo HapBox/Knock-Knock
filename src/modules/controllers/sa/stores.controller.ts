@@ -146,7 +146,7 @@ class Controller {
 
   @DELETE('/:storeId/filials/:filialId', {
     summary: 'Удаление филиала магазина',
-    handlers: [requireToken, dtoValidator(StoreFilialDeleteDto)],
+    handlers: [requireToken, requireRole, dtoValidator(StoreFilialDeleteDto)],
   })
   async deleteStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: StoreFilialDeleteDto = {
@@ -161,7 +161,7 @@ class Controller {
 
   @PATCH('/:storeId/workers/:workerPhone/add', {
     summary: 'Добавление администратора магазина',
-    handlers: [requireToken, dtoValidator(StoreWorkerAddDto)],
+    handlers: [requireToken, requireRole, dtoValidator(StoreWorkerAddDto)],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async addWorker(req: BaseRequest, res: Response, next: NextFunction) {
@@ -176,7 +176,7 @@ class Controller {
 
   @PATCH('/:storeId/workers/:workerId/remove', {
     summary: 'Удаление администратора магазина',
-    handlers: [requireToken, dtoValidator(StoreWorkerDeleteDto)],
+    handlers: [requireToken, requireRole, dtoValidator(StoreWorkerDeleteDto)],
   })
   async removeWorker(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: StoreWorkerDeleteDto = {
