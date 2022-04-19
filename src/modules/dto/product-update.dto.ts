@@ -3,7 +3,7 @@ import { BaseDto } from '../base/base.dto';
 
 export class ProductUpdateDto extends BaseDto {
   productId!: string;
-  filialId!: string; //скорее всего не надо
+  storeId!: string; 
 
   @IsNotEmpty()
   @IsString()

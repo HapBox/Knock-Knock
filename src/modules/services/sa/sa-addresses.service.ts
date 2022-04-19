@@ -5,18 +5,18 @@ import { AddressUpdateDto } from '../../dto/address-update.dto';
 //переедет в api
 export default class SaAddressesService {
   static async createAddress(dto: AddressCreateDto) {
-    const address = await Address.create(dto);
+    const address = await Address.create({ ...dto });
     return address;
   }
 
   static async patchAddress(dto: AddressUpdateDto) {
     const address = await Address.findByPk(dto.addressId);
-
-    if (!address)
+    if (!address) {
       throwError({
         statusCode: 404,
         message: 'Address not found',
       });
+    }
 
     await address.update({
       ...dto,
@@ -26,7 +26,6 @@ export default class SaAddressesService {
 
   static async deleteAddress(addressId: string) {
     const address = await Address.findByPk(addressId);
-
     if (!address)
       throwError({
         statusCode: 404,

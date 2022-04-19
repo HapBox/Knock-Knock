@@ -4,6 +4,8 @@ import { requireRole } from '../../../middlewares/require-role';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import SAFilialModels from '../../../swagger/swagger-models/sa/filials';
+import SAProductsModels from '../../../swagger/swagger-models/sa/products';
+import SAPromotionModels from '../../../swagger/swagger-models/sa/promotions';
 import SAStoresModels from '../../../swagger/swagger-models/sa/stores';
 import SAUsersModels from '../../../swagger/swagger-models/sa/users';
 import SwaggerUtils from '../../../swagger/swagger-utils';
@@ -11,6 +13,11 @@ import { BaseDto } from '../../base/base.dto';
 import BaseRequest from '../../base/base.request';
 import { FilialCreateDto } from '../../dto/filial-create.dto';
 import { FilialUpdateDto } from '../../dto/filial-update.dto';
+import { ProductCreateDto } from '../../dto/product-create.dto';
+import { ProductGetDeleteOneDto } from '../../dto/product-get-delete-one.dto';
+import { ProductUpdateDto } from '../../dto/product-update.dto';
+import { PromotionCreateDto } from '../../dto/promotion-create.dto';
+import { PromotionDeleteDto } from '../../dto/promotion-delete.dto';
 import { StoreCreateDto } from '../../dto/store-create.dto';
 import { StoreGetDeleteOneDto } from '../../dto/store-get-delete-one.dto';
 import { StoreUpdateDto } from '../../dto/store-update.dto';
@@ -185,6 +192,117 @@ class Controller {
       userRole: req.userRole,
     };
     const result = await SaStoresService.removeWorker(dto);
+    res.json(result);
+  }
+
+  @GET('/:id', {
+    summary: 'Получение всех продуктов в магазине по storeId',
+    handlers: [requireToken, requireRole],
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfoList)],
+  })
+  async getProducts(req: BaseRequest, res: Response, next: NextFunction) {
+    const dto: StoreGetDeleteOneDto = {
+      userRole: req.userRole,
+      workStoreId: req.workStoreId,
+      storeId: req.params.id,
+    };
+    const result = await SaStoresService.getProductsByStoreId(dto);
+    res.json(result);
+  }
+
+  @POST('/:id/products', {
+    summary: 'Добавление продукта в магазин',
+    handlers: [requireToken, requireRole, dtoValidator(ProductCreateDto)],
+    body: SAProductsModels.reqProductCreate,
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
+  })
+  async createProduct(req: BaseRequest, res: Response, next: NextFunction) {
+    const dto: ProductCreateDto = {
+      ...req.body,
+      workStoreId: req.workStoreId,
+      userRole: req.userRole,
+      storeId: req.params.id,
+    };
+    const result = await SaStoresService.createProduct(dto);
+    res.json(result);
+  }
+
+  @GET('/:storeId/products/:productId', {
+    summary: 'Получение продукта по id',
+    handlers: [requireToken, requireRole],
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
+  })
+  async getProduct(req: BaseRequest, res: Response, next: NextFunction) {
+    const dto: ProductGetDeleteOneDto = {
+      userRole: req.userRole,
+      workStoreId: req.workStoreId,
+      productId: req.params.productId,
+    };
+    const result = await SaStoresService.getProductById(dto);
+    res.json(result);
+  }
+
+  @PATCH('/:storeId/products/:productId', {
+    summary: 'Обновление продукта',
+    handlers: [requireToken, requireRole, dtoValidator(ProductUpdateDto)],
+    body: SAProductsModels.reqProductCreate,
+    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfo)],
+  })
+  async updateProduct(req: BaseRequest, res: Response, next: NextFunction) {
+    const dto: ProductUpdateDto = {
+      ...req.body,
+      productId: req.params.productId,
+      storeId: req.params.storeId,
+    };
+    const result = await SaStoresService.updateProductById(dto);
+    res.json(result);
+  }
+
+  @DELETE('/:storeId/products/:productId', {
+    summary: 'Удаление продукта',
+    handlers: [requireToken, requireRole],
+  })
+  async deleteProduct(req: BaseRequest, res: Response, next: NextFunction) {
+    const dto: ProductGetDeleteOneDto = {
+      userRole: req.userRole,
+      workStoreId: req.workStoreId,
+      productId: req.params.productId,
+    };
+    const result = await SaStoresService.deleteProductById(dto);
+    res.json(result);
+  }
+
+  @POST('/:storeId/products/:productId/promotion', {
+    summary: 'Добавление акции',
+    handlers: [requireToken,requireRole, dtoValidator(PromotionCreateDto)],
+    body: SAPromotionModels.reqPromotionInfo,
+    responses: [SwaggerUtils.body200(SAPromotionModels.resPromotionInfo)],
+  })
+  async createPromotion(req: BaseRequest, res: Response, next: NextFunction) {
+    const dto: PromotionCreateDto = {
+      ...req.body,
+      productId: req.params.productId,
+      storeId: req.params.storeId,
+      userRole: req.userRole,
+      workStoreId: req.workStoreId,
+    };
+    const result = await SaStoresService.createPromotion(dto);
+    res.json(result);
+  }
+
+  @DELETE('/:storeId/products/:productId/promotion/:promotionId', {
+    summary: 'Удаление акции',
+    handlers: [requireToken, requireRole],
+  })
+  async deletePromotion(req: BaseRequest, res: Response, next: NextFunction) {
+    const dto: PromotionDeleteDto = {
+      storeId: req.params.storeId,
+      productId: req.params.productId,
+      promotionId: req.params.promotionId,
+      userRole: req.userRole,
+      workStoreId: req.workStoreId,
+    };
+    const result = await SaStoresService.deletePromotion(dto);
     res.json(result);
   }
 }

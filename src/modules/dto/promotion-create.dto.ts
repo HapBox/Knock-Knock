@@ -3,6 +3,7 @@ import { BaseDto } from '../base/base.dto';
 
 export class PromotionCreateDto extends BaseDto {
   productId!: string;
+  storeId!: string;
 
   @IsInt()
   @IsNotEmpty()
