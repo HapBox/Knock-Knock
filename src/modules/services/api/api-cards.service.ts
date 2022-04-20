@@ -10,6 +10,7 @@ export default class ApiCardsService {
         userId: userId,
         isExist: true,
       },
+      attributes: ['id', 'number', 'date', 'cvv'],
     });
     return { cardList: cardList };
   }
@@ -19,7 +20,7 @@ export default class ApiCardsService {
     return card;
   }
 
-  static async deleteCard(dto:CardDeleteDto) {
+  static async deleteCard(dto: CardDeleteDto) {
     const card = await Card.findOne({
       where: {
         userId: dto.userId,

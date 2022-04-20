@@ -1,4 +1,4 @@
-import { IsDate, IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class CardCreateDto extends BaseDto {
@@ -9,8 +9,8 @@ export class CardCreateDto extends BaseDto {
   number!: number;
 
   @IsNotEmpty()
-  @IsDate()
-  date!: Date;
+  @IsString()
+  date!: string;
 
   @IsNotEmpty()
   @IsInt()
