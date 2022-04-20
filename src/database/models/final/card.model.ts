@@ -21,13 +21,13 @@ export default class Card extends Model {
   @Column({
     allowNull: false,
   })
-  public date!: Date;
+  public date!: string;
 
   @Column({
     allowNull: false,
     type: DataType.SMALLINT,
   })
-  public cvv!: number;
+  public cvv!: string;
 
   @Column({
     defaultValue: true

@@ -1,6 +1,5 @@
 export default class APICardsModels {
   static reqCardCreate = {
-    userId: 'UUID',
     number: 'Номер карты',
     date: 'Дата',
     cvv: 'CVV код',
@@ -8,7 +7,6 @@ export default class APICardsModels {
 
   static resCardInfo = {
     cardId: 'UUID',
-    userId: 'UUID',
     number: 'Номер карты',
     date: 'Дата',
     cvv: 'CVV код',

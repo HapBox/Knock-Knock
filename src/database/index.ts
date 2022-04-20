@@ -32,7 +32,7 @@ export async function initSequelize() {
     await sequelizeInstance.authenticate();
     // await sequelizeInstance.dropSchema('public', { });
     // await sequelizeInstance.createSchema('public', {  });
-    // await sequelizeInstance.sync();
+    await sequelizeInstance.sync();
     Log.info('Sequelize was initialized');
   } catch (error) {
     Log.error(error);
