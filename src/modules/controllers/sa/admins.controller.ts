@@ -41,7 +41,7 @@ class Controller {
   async patchAdmin(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: UserUpdateDto = {
       ...req.body,
-      adminId: req.params.id,
+      userId: req.params.id,
     };
     const result = await SaAdminsService.updateAdmin(dto);
     res.json(result);

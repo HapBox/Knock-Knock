@@ -47,6 +47,7 @@ class Controller {
   async patchCategory(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: CategoryUpdateDto = {
       ...req.body,
+      categoryId: req.params.id,
       userRole: req.userRole,
     };
     const result = await SaCategoriesService.patchCategory(dto);

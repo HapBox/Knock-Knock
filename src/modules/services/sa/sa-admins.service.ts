@@ -121,6 +121,7 @@ export default class SaAdminsService {
       });
     admin = await User.create({
       ...dto,
+      role:RoleTypes.ADMIN
     });
 
     return admin;
@@ -142,7 +143,7 @@ export default class SaAdminsService {
 
     await admin.update({
       role: RoleTypes.USER,
-      workStoreId: '',
+      workStoreId: null,
     });
 
     return admin;

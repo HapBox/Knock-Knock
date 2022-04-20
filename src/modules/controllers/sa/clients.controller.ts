@@ -62,7 +62,7 @@ class Controller {
   async patchClient(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: UserUpdateDto = {
       ...req.body,
-      clientId: req.params.id,
+      userId: req.params.id,
     };
     const result = await SaClientsService.updateClient(dto);
     res.json(result);

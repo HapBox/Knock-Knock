@@ -1,5 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
-import { RoleTypes } from '../../utils/constants';
+import { IsNotEmpty, IsString} from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class UserUpdateDto extends BaseDto {
