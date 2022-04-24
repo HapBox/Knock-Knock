@@ -3,7 +3,7 @@ import SAFileModels from "./file-db";
 export default class SACategoriesModels {
   static reqCategoryCreate = {
     name: 'Название категории',
-    image: SAFileModels.resFileDB,
+    imageId: 'UUID',
   };
 
   static resCategoryInfo = {

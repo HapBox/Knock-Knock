@@ -5,7 +5,7 @@ export default class SAStoresModels {
   static reqStoreCreate = {
     name: 'Название магазина',
     phone: '88005553535',
-    image: SAFileModels.resFileDB,
+    imageId: 'UUID',
   };
 
   static resStoreInfo = {

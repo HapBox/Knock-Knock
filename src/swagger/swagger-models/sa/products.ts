@@ -9,14 +9,14 @@ export default class SAProductsModels {
     price: 123,
     categoryId: 'UUID',
     filialId: 'UUID',
-    image: SAFileModels.resFileDB,
+    imageId: 'UUID',
   };
 
   static reqProductUpdate = {
     name: 'Название продукта',
     description: 'Описание продукта',
     price: 123,
-    image: SAFileModels.resFileDB,
+    imageId: 'UUID',
   };
 
   static resProductInfo = {
