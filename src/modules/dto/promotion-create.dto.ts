@@ -1,4 +1,4 @@
-import { IsInt, IsDate, IsNotEmpty } from 'class-validator';
+import { IsInt, IsDate, IsNotEmpty, IsDateString } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class PromotionCreateDto extends BaseDto {
@@ -9,7 +9,7 @@ export class PromotionCreateDto extends BaseDto {
   @IsNotEmpty()
   discountPercent!: number;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   dateToEnd!: Date;
 }

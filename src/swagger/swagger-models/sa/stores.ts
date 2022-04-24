@@ -13,6 +13,15 @@ export default class SAStoresModels {
     name: 'Название магазина',
     phone: '88005553535',
     image: SAFileModels.resFileDB,
+    productList: [SAProductsModels.resProductInfo],
+  };
+
+  static resStoreList = {
+    id: 'UUID',
+    store: 'Название магазина',
+    image: SAFileModels.resFileDB,
+    phone: '88005553535',
+    countProducts: 24,
   };
 
   static resStoreFullInfo = {

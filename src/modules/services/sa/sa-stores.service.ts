@@ -1,4 +1,7 @@
+import { emitKeypressEvents } from 'readline';
 import Address from '../../../database/models/final/address.model';
+import Category from '../../../database/models/final/category.model';
+import FileDB from '../../../database/models/final/file-db.model';
 import Filial from '../../../database/models/final/filial.model';
 import Product from '../../../database/models/final/product.model';
 import Promotion from '../../../database/models/final/promotion.model';
@@ -31,6 +34,9 @@ export default class SaStoresService {
             model: Product,
             duplicating: false,
           },
+          {
+            model: FileDB,
+          },
         ],
       });
     } else {
@@ -43,13 +49,19 @@ export default class SaStoresService {
             model: Product,
             duplicating: false,
           },
+          {
+            model: FileDB,
+          },
         ],
       });
     }
     const result: any[] = storeList.map((el) => {
       return {
+        id: el.id,
         store: el.name,
-        count: el.productList.length,
+        image: el.image,
+        phone: el.phone,
+        countProducts: el.productList.length,
       };
     });
 
@@ -64,7 +76,9 @@ export default class SaStoresService {
       });
     }
     const store = await Store.create({ ...dto });
-    return store;
+    return await Store.findByPk(store.id, {
+      include: [{ model: FileDB }],
+    });
   }
 
   static async getStoreById(dto: StoreGetDeleteOneDto) {
@@ -75,19 +89,34 @@ export default class SaStoresService {
       });
     }
 
-    const store = await Store.findByPk(dto.storeId);
+    const store = await Store.findByPk(dto.storeId, {
+      include: [
+        {
+          model: Product,
+          include: [
+            {
+              model: FileDB,
+            },
+            {
+              model: Promotion,
+            },
+            {
+              model: Category,
+            },
+          ],
+        },
+        {
+          model: FileDB,
+        },
+      ],
+    });
     if (!store) {
       throwError({
         statusCode: 404,
         message: 'Store not found',
       });
     }
-    const productList = await Product.findAll({
-      where: {
-        storeId: dto.storeId,
-      },
-    });
-    return { store: store, productList: productList };
+    return store;
   }
 
   static async deleteStoreById(dto: StoreGetDeleteOneDto) {
@@ -173,7 +202,6 @@ export default class SaStoresService {
     }
 
     const address = await Address.create({
-      //хзхз
       ...dto.address,
     });
 
@@ -182,7 +210,11 @@ export default class SaStoresService {
       ...dto,
     });
 
-    return filial;
+    return await Filial.findByPk(filial.id, {
+      include: {
+        model: Address,
+      },
+    });
   }
 
   static async updateStoreFilial(dto: FilialUpdateDto) {
@@ -219,7 +251,7 @@ export default class SaStoresService {
       });
     }
     await address.update({ ...dto.address });
-    return address;
+    return await Filial.findByPk(filial.id, { include: { model: Address } });
   }
 
   static async deleteStoreFilial(dto: StoreFilialDeleteDto) {
@@ -365,7 +397,7 @@ export default class SaStoresService {
         },
       ],
     });
-    return { productList: productList };
+    return productList;
   }
 
   static async getProductById(dto: ProductGetDeleteOneDto) {
@@ -374,6 +406,12 @@ export default class SaStoresService {
         {
           model: Promotion,
           duplicating: false,
+        },
+        {
+          model: FileDB,
+        },
+        {
+          model: Category,
         },
       ],
     });
@@ -405,6 +443,12 @@ export default class SaStoresService {
         {
           model: Promotion,
           duplicating: false,
+        },
+        {
+          model: FileDB,
+        },
+        {
+          model: Category,
         },
       ],
     });

@@ -35,7 +35,7 @@ export default class Address extends Model {
   public entrance!: number;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.SMALLINT,
   })
   public floor!: number;
@@ -47,7 +47,7 @@ export default class Address extends Model {
   public apartment!: number;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
   })
   public intercom!: string;
 

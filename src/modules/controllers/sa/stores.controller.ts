@@ -31,7 +31,7 @@ class Controller {
   @GET('/', {
     summary: 'Получение списка магазинов и количества их продуктов',
     handlers: [requireToken, requireRole],
-    responses: [SwaggerUtils.body200(SAStoresModels.resStoreInfoList)],
+    responses: [SwaggerUtils.body200(SAStoresModels.resStoreList)],
   })
   async getStores(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: BaseDto = {
@@ -142,7 +142,7 @@ class Controller {
   async patchStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: FilialUpdateDto = {
       ...req.body,
-      storeId: req.params.id,
+      storeId: req.params.storeId,
       filialId: req.params.filialId,
       userRole: req.userRole,
       workStoreId: req.workStoreId,
@@ -158,7 +158,7 @@ class Controller {
   async deleteStoreFilial(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: StoreFilialDeleteDto = {
       filialId: req.params.filialId,
-      storeId: req.params.id,
+      storeId: req.params.storeId,
       userRole: req.userRole,
       workStoreId: req.workStoreId,
     };
@@ -192,21 +192,6 @@ class Controller {
       userRole: req.userRole,
     };
     const result = await SaStoresService.removeWorker(dto);
-    res.json(result);
-  }
-
-  @GET('/:id', {
-    summary: 'Получение всех продуктов в магазине по storeId',
-    handlers: [requireToken, requireRole],
-    responses: [SwaggerUtils.body200(SAProductsModels.resProductInfoList)],
-  })
-  async getProducts(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto: StoreGetDeleteOneDto = {
-      userRole: req.userRole,
-      workStoreId: req.workStoreId,
-      storeId: req.params.id,
-    };
-    const result = await SaStoresService.getProductsByStoreId(dto);
     res.json(result);
   }
 
@@ -274,7 +259,7 @@ class Controller {
 
   @POST('/:storeId/products/:productId/promotion', {
     summary: 'Добавление акции',
-    handlers: [requireToken,requireRole, dtoValidator(PromotionCreateDto)],
+    handlers: [requireToken, requireRole, dtoValidator(PromotionCreateDto)],
     body: SAPromotionModels.reqPromotionInfo,
     responses: [SwaggerUtils.body200(SAPromotionModels.resPromotionInfo)],
   })

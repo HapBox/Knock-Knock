@@ -12,7 +12,7 @@ export default class SaAdminsService {
       },
     });
 
-    return {adminList: adminList};
+    return { adminList: adminList };
   }
 
   static async getAdminById(adminId: string) {
@@ -121,7 +121,7 @@ export default class SaAdminsService {
       });
     admin = await User.create({
       ...dto,
-      role:RoleTypes.ADMIN
+      role: RoleTypes.ADMIN,
     });
 
     return admin;

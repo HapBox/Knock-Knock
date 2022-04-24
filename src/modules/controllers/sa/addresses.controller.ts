@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { ApiController, DELETE, GET, PATCH, POST } from '../../../core/api-decorators';
+import { ApiController, DELETE, PATCH, POST } from '../../../core/api-decorators';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import SAAddressesModels from '../../../swagger/swagger-models/sa/addresses';
@@ -9,7 +9,7 @@ import { AddressCreateDto } from '../../dto/address-create.dto';
 import { AddressUpdateDto } from '../../dto/address-update.dto';
 import SaAddressesService from '../../services/sa/sa-addresses.service';
 
-//сделать так для филиалов
+//нахер он нам тогда вообще нужен, если все происходит в филиалах
 @ApiController('/sa/api/addresses')
 class Controller {
   @POST('/', {

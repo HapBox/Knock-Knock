@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsNotEmpty } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class AddressCreateDto extends BaseDto {
@@ -14,15 +14,19 @@ export class AddressCreateDto extends BaseDto {
   @IsString()
   house!: string;
 
+  @IsOptional()
   @IsInt()
   entrance!: number;
 
+  @IsOptional()
   @IsInt()
   floor!: number;
 
+  @IsOptional()
   @IsInt()
   apartment!: number;
 
+  @IsOptional()
   @IsString()
   intercom!: string;
 }

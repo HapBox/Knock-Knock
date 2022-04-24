@@ -53,7 +53,7 @@ export default class Product extends Model {
   @ForeignKey(() => Store)
   public storeId!: string;
   
-  @BelongsTo(() => Store, 'storelId')
+  @BelongsTo(() => Store, 'storeId')
   public store!: Store;
 
   @BelongsToMany(() => Order, () => OrderProduct)

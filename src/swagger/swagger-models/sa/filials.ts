@@ -2,7 +2,7 @@ import SAAddressesModels from './addresses';
 
 export default class SAFilialModels {
   static reqFilialCreate = {
-    address: SAAddressesModels.resAddressInfo,
+    address: SAAddressesModels.reqAddressCreate,
   };
 
   static resFilialShortInfo = {

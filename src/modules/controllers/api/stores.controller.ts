@@ -1,6 +1,5 @@
 import { NextFunction, Response } from 'express';
 import { ApiController, GET } from '../../../core/api-decorators';
-import { dtoValidator } from '../../../middlewares/validate';
 import APIFilialModels from '../../../swagger/swagger-models/api/filials';
 import APIProductsModels from '../../../swagger/swagger-models/api/products';
 import APIRatingModels from '../../../swagger/swagger-models/api/ratings';

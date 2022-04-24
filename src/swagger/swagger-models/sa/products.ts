@@ -8,7 +8,6 @@ export default class SAProductsModels {
     description: 'Описание продукта',
     price: 123,
     categoryId: 'UUID',
-    filialId: 'UUID',
     imageId: 'UUID',
   };
 
@@ -25,7 +24,6 @@ export default class SAProductsModels {
     description: 'Описание продукта',
     price: 123,
     'promotion?': SAPromotionModels.resPromotionInfo,
-    'promotionId?': 'UUID',
     category: SACategoriesModels.resCategoryInfo,
     categoryId: 'UUID',
     image: SAFileModels.resFileDB,
