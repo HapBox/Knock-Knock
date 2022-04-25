@@ -1,3 +1,4 @@
+import Address from '../../../database/models/final/address.model';
 import Filial from '../../../database/models/final/filial.model';
 import Order from '../../../database/models/final/order.model';
 import Product from '../../../database/models/final/product.model';
@@ -18,18 +19,24 @@ export default class ApiOrdersService {
       where: {
         userId: userId,
       },
-      include: {
-        model: Product,
-        through: {
-          attributes: ['count'],
+      include: [
+        {
+          model: Product,
+          through: {
+            attributes: ['count'],
+          },
         },
-      },
+        {
+          model: Address,
+        },
+      ],
     });
     return { orderList: orderList };
   }
 
   static async createOrder(dto: OrderCreateDto) {
-    const order = await Order.create({ ...dto });
+    const address = await Address.create({ ...dto.userAddress });
+    const order = await Order.create({ ...dto, userAddressId: address.id });
     for (let el of dto.productList) {
       await OrderProduct.create({
         ...el,
@@ -45,6 +52,17 @@ export default class ApiOrdersService {
         id: dto.orderId,
         userId: dto.userId,
       },
+      include: [
+        {
+          model: Product,
+          through: {
+            attributes: ['count'],
+          },
+        },
+        {
+          model: Address,
+        },
+      ],
     });
     return order;
   }
@@ -62,9 +80,17 @@ export default class ApiOrdersService {
         message: 'Not found.',
       });
     }
-
-    await order.update({ addressId: dto.addressId });
-
+    let address = await Address.findByPk(order.userAddressId);
+    if (!address) {
+      throwError({
+        statusCode: 404,
+        message: 'Not found.',
+      });
+    }
+  
+    await address.update({
+      ...dto.userAddress,
+    });
     return order;
   }
 
@@ -75,14 +101,15 @@ export default class ApiOrdersService {
         userId: dto.userId,
       },
     });
-    if (!order) {
+    if (!order || order.status === StatusTypes.CANCELED) {
       throwError({
         statusCode: 404,
         message: 'Not found.',
       });
     }
+    console.log(order);
     await order.update({ status: StatusTypes.CANCELED });
-
+    console.log(order);
     return order;
   }
 

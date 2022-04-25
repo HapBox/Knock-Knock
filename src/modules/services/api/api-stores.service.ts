@@ -177,8 +177,7 @@ export default class ApiStoresService {
       include: [
         {
           model: User,
-          attributes: ['name'],
-          duplicating: false,
+          attributes: ['firstName', 'lastName'],
         },
       ],
     });

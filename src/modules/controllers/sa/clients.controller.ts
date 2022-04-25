@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { ApiController, GET, PATCH } from '../../../core/api-decorators';
+import { requireAdmin } from '../../../middlewares/require-admin';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import SAUsersModels from '../../../swagger/swagger-models/sa/users';
@@ -12,7 +13,7 @@ import SaClientsService from '../../services/sa/sa-clients.service';
 class Controller {
   @GET('/', {
     summary: 'Получение списка всех клиентов',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfoList)],
   })
   async getClients(req: BaseRequest, res: Response, next: NextFunction) {
@@ -22,7 +23,7 @@ class Controller {
 
   @GET('/:id', {
     summary: 'Получение информации о клиенте по id',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async getClientById(req: BaseRequest, res: Response, next: NextFunction) {
@@ -33,7 +34,7 @@ class Controller {
 
   @PATCH('/:id/block', {
     summary: 'Блокировка клиента по id',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async blockClient(req: BaseRequest, res: Response, next: NextFunction) {
@@ -44,7 +45,7 @@ class Controller {
 
   @PATCH('/:id/unblock', {
     summary: 'Разблокировка клиента по id',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async unblockClient(req: BaseRequest, res: Response, next: NextFunction) {
@@ -55,7 +56,7 @@ class Controller {
 
   @PATCH('/:id', {
     summary: 'Обновление информации о клиенте по id',
-    handlers: [requireToken, dtoValidator(UserUpdateDto)],
+    handlers: [requireToken, requireAdmin, dtoValidator(UserUpdateDto)],
     body: SAUsersModels.reqUserCreate,
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })

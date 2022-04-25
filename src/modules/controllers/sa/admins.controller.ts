@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { ApiController, GET, PATCH, POST } from '../../../core/api-decorators';
+import { requireAdmin } from '../../../middlewares/require-admin';
 import { requireToken } from '../../../middlewares/require-token';
 import { dtoValidator } from '../../../middlewares/validate';
 import SAUsersModels from '../../../swagger/swagger-models/sa/users';
@@ -13,7 +14,7 @@ import SaAdminsService from '../../services/sa/sa-admins.service';
 class Controller {
   @GET('/', {
     summary: 'Получение списка всех админов',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfoList)],
   })
   async getAdmins(req: BaseRequest, res: Response, next: NextFunction) {
@@ -23,7 +24,7 @@ class Controller {
 
   @GET('/:id', {
     summary: 'Получение информации о админе',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async getAdmin(req: BaseRequest, res: Response, next: NextFunction) {
@@ -34,7 +35,7 @@ class Controller {
 
   @PATCH('/:id', {
     summary: 'Обновление информации о админе по id',
-    handlers: [requireToken, dtoValidator(UserUpdateDto)],
+    handlers: [requireToken, requireAdmin, dtoValidator(UserUpdateDto)],
     body: SAUsersModels.reqAdminCreate,
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
@@ -49,7 +50,7 @@ class Controller {
 
   @PATCH('/:id/block', {
     summary: 'Блокировка админа по id',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async blockAdmin(req: BaseRequest, res: Response, next: NextFunction) {
@@ -60,7 +61,7 @@ class Controller {
 
   @PATCH('/:id/unblock', {
     summary: 'Разблокировка админа по id',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async unblockAdmin(req: BaseRequest, res: Response, next: NextFunction) {
@@ -71,7 +72,7 @@ class Controller {
 
   @POST('/', {
     summary: 'Создание администратора',
-    handlers: [requireToken, dtoValidator(UserCreateDto)],
+    handlers: [requireToken, requireAdmin, dtoValidator(UserCreateDto)],
     body: SAUsersModels.reqAdminCreate,
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
@@ -83,7 +84,7 @@ class Controller {
 
   @PATCH('/:id/dismiss', {
     summary: 'Увольнение админа (понижение в правах)',
-    handlers: [requireToken],
+    handlers: [requireToken, requireAdmin],
     responses: [SwaggerUtils.body200(SAUsersModels.resUserInfo)],
   })
   async dismissAdmin(req: BaseRequest, res: Response, next: NextFunction) {
