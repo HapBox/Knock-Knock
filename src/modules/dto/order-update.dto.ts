@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsUUID, IsDate, IsNotEmpty, ValidateNested, IsNotEmptyObject } from 'class-validator';
+import { IsEnum, IsUUID, IsNotEmpty, ValidateNested, IsNotEmptyObject, IsOptional, IsDateString } from 'class-validator';
 import { PaymentTypes } from '../../utils/constants';
 import { BaseDto } from '../base/base.dto';
 import { AddressCreateDto } from './address-create.dto';
@@ -20,9 +20,11 @@ export class OrderUpdateDto extends BaseDto {
   @IsEnum(PaymentTypes)
   payment!: string;
 
+  @IsOptional()
   @IsUUID(4)
   cardId!: string;
 
-  @IsDate()
+  @IsOptional()
+  @IsDateString()
   dateTo!: Date;
 }

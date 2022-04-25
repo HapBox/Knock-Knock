@@ -1,6 +1,11 @@
 import { Op } from 'sequelize';
+import Address from '../../../database/models/final/address.model';
+import Category from '../../../database/models/final/category.model';
+import FileDB from '../../../database/models/final/file-db.model';
 import Filial from '../../../database/models/final/filial.model';
 import Order from '../../../database/models/final/order.model';
+import Product from '../../../database/models/final/product.model';
+import Store from '../../../database/models/final/store.model';
 import { StatusTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
 import { OrderCreateDto } from '../../dto/order-create.dto';
@@ -24,9 +29,7 @@ export default class SaOrdersService {
 
     const orderList = await Order.findAll({
       where: {
-        filialId: {
-          [Op.any]: filialIdList,
-        },
+        filialId: filialIdList,
       },
     });
 
@@ -54,7 +57,9 @@ export default class SaOrdersService {
   }
 
   static async getOrderById(orderId: string) {
-    const order = await Order.findByPk(orderId);
+    const order = await Order.findByPk(orderId, {
+      include: [{ model: Address }, { model: Filial}, { model: Product }],
+    });
 
     if (!order)
       throwError({

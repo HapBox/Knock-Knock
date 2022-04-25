@@ -56,7 +56,7 @@ class Controller {
       ...req.body,
       orderId: req.params.id,
     };
-    const result = SaOrdersService.updateOrder(dto);
+    const result = await SaOrdersService.updateOrder(dto);
     res.json(result);
   }
 
@@ -67,7 +67,7 @@ class Controller {
   })
   async preparingOrder(req: BaseRequest, res: Response, next: NextFunction) {
     const orderId: string = req.params.id;
-    const result = SaOrdersService.prepareOrder(orderId);
+    const result = await SaOrdersService.prepareOrder(orderId);
     res.json(result);
   }
 
@@ -78,7 +78,7 @@ class Controller {
   })
   async canceledOrder(req: BaseRequest, res: Response, next: NextFunction) {
     const orderId: string = req.params.id;
-    const result = SaOrdersService.cancelOrder(orderId);
+    const result = await SaOrdersService.cancelOrder(orderId);
     res.json(result);
   }
 
@@ -89,7 +89,7 @@ class Controller {
   })
   async deliveringOrder(req: BaseRequest, res: Response, next: NextFunction) {
     const orderId: string = req.params.id;
-    const result = SaOrdersService.deliverOrder(orderId);
+    const result = await SaOrdersService.deliverOrder(orderId);
     res.json(result);
   }
 
@@ -100,7 +100,7 @@ class Controller {
   })
   async readyOrder(req: BaseRequest, res: Response, next: NextFunction) {
     const orderId: string = req.params.id;
-    const result = SaOrdersService.readyOrder(orderId);
+    const result = await SaOrdersService.readyOrder(orderId);
     res.json(result);
   }
 

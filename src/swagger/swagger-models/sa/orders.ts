@@ -18,7 +18,8 @@ export default class SAOrderModels {
     filialId: 'UUID',
     userAddress: SAAddressesModels.reqAddressCreate,
     payment: Object.values(PaymentTypes),
-    dateTo: '27.02.2022',
+    dateTo: '2022-04-25',
+    price: 150,
     countPersons: 4,
     productList: [SAOrderModels.reqProductOrderCreate],
   };
