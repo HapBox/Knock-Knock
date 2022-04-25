@@ -3,7 +3,6 @@ export default class APIUserModels {
     phone: 'Номер телефона',
     firstName: 'Имя',
     lastName: 'Фамилия',
-    'workStoreId?': 'UUID',
   };
 
   static resUserInfo = {

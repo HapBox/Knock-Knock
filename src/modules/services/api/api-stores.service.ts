@@ -1,6 +1,7 @@
 import { ParsedQs } from 'qs';
 import { Op } from 'sequelize';
 import Address from '../../../database/models/final/address.model';
+import Category from '../../../database/models/final/category.model';
 import FileDB from '../../../database/models/final/file-db.model';
 import Filial from '../../../database/models/final/filial.model';
 import Product from '../../../database/models/final/product.model';
@@ -8,6 +9,7 @@ import Rating from '../../../database/models/final/rating.model';
 import Store from '../../../database/models/final/store.model';
 import User from '../../../database/models/final/user.model';
 import { throwError } from '../../../utils/http-exception';
+import { FilialGetByCity } from '../../dto/filials-get-by-city';
 import { StoreFilialGetDto } from '../../dto/storeFilial-get.dto';
 
 export default class ApiStoresService {
@@ -41,10 +43,10 @@ export default class ApiStoresService {
                 where: {
                   city: query.city,
                 },
-                required: true
+                required: true,
               },
             ],
-            required: true
+            required: true,
           },
         ],
       });
@@ -68,11 +70,11 @@ export default class ApiStoresService {
                 where: {
                   city: query.city,
                 },
-                required: true
+                required: true,
               },
             ],
             limit: 1,
-            required: true
+            required: true,
           },
           {
             model: FileDB,
@@ -86,7 +88,6 @@ export default class ApiStoresService {
         include: [
           {
             model: Filial,
-            limit: 1,
             attributes: ['id'],
             include: [
               {
@@ -95,10 +96,10 @@ export default class ApiStoresService {
                 where: {
                   city: query.city,
                 },
-                required: true
+                required: true,
               },
             ],
-            required: true
+            required: true,
           },
           {
             model: FileDB,
@@ -111,7 +112,24 @@ export default class ApiStoresService {
   }
 
   static async getStoreById(storeId: string) {
-    const store = await Store.findByPk(storeId);
+    const store = await Store.findByPk(storeId, {
+      include: [
+        {
+          model: FileDB,
+        },
+        {
+          model: Product,
+          include: [
+            {
+              model: FileDB,
+            },
+            {
+              model: Category,
+            },
+          ],
+        },
+      ],
+    });
 
     if (!store) {
       throwError({
@@ -119,19 +137,15 @@ export default class ApiStoresService {
         message: 'Store not found',
       });
     }
-    const productList = await Product.findAll({
-      where: {
-        storeId,
-      },
-    });
-    return { store: store, productList: productList };
+    return store;
   }
 
-  static async getFilialList(storeId: string) {
+  static async getFilialList(dto: FilialGetByCity) {
     const filialList = await Filial.findAll({
       where: {
-        storeId: storeId,
+        storeId: dto.storeId,
       },
+      include: { model: Address, where: { city: dto.city } },
     });
     return { filialList: filialList };
   }
@@ -141,6 +155,9 @@ export default class ApiStoresService {
       where: {
         id: dto.filialId,
         storeId: dto.storeId,
+      },
+      include: {
+        model: Address,
       },
     });
     if (!filial) {
@@ -174,6 +191,14 @@ export default class ApiStoresService {
         storeId,
         categoryId,
       },
+      include: [
+        {
+          model: Category,
+        },
+        {
+          model: FileDB,
+        },
+      ],
     });
     return { productList: products };
   }
@@ -186,6 +211,14 @@ export default class ApiStoresService {
         },
         storeId,
       },
+      include: [
+        {
+          model: Category,
+        },
+        {
+          model: FileDB,
+        },
+      ],
     });
     return { productList: products };
   }
@@ -195,12 +228,29 @@ export default class ApiStoresService {
       where: {
         storeId,
       },
+      include: [
+        {
+          model: Category,
+        },
+        {
+          model: FileDB,
+        },
+      ],
     });
     return { productList: productList };
   }
 
   static async getProductById(productId: string) {
-    const product = await Product.findByPk(productId);
+    const product = await Product.findByPk(productId, {
+      include: [
+        {
+          model: Category,
+        },
+        {
+          model: FileDB,
+        },
+      ],
+    });
     return product;
   }
 }

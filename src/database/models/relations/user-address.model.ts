@@ -8,12 +8,10 @@ import User from '../final/user.model';
 })
 export default class UserAddress extends Model {
   @ForeignKey(() => User)
-  @PrimaryKey
   @Column
   public userId!: string;
 
   @ForeignKey(() => Address)
-  @PrimaryKey
   @Column
   public addressId!: string;
 }

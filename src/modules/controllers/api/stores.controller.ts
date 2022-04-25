@@ -7,6 +7,7 @@ import APIStoresModels from '../../../swagger/swagger-models/api/stores';
 import SAProductsModels from '../../../swagger/swagger-models/sa/products';
 import SwaggerUtils from '../../../swagger/swagger-utils';
 import BaseRequest from '../../base/base.request';
+import { FilialGetByCity } from '../../dto/filials-get-by-city';
 import { StoreFilialGetDto } from '../../dto/storeFilial-get.dto';
 import ApiStoresService from '../../services/api/api-stores.service';
 
@@ -22,7 +23,7 @@ class Controller {
     responses: [SwaggerUtils.body200(APIStoresModels.resStoreInfoList)],
   })
   async getStores(req: BaseRequest, res: Response, next: NextFunction) {
-    const result = await ApiStoresService.getStores(req.query); 
+    const result = await ApiStoresService.getStores(req.query);
     res.json(result);
   }
 
@@ -37,10 +38,17 @@ class Controller {
 
   @GET('/:id/filials', {
     summary: 'Получение списка филиалов в городе',
+    query: {
+      city: 'Название города',
+    },
     responses: [SwaggerUtils.body200(APIFilialModels.resFilialInfoList)],
   })
   async getStoreFilialList(req: BaseRequest, res: Response, next: NextFunction) {
-    const result = await ApiStoresService.getFilialList(req.params.id);
+    const dto: FilialGetByCity = {
+      storeId: req.params.id,
+      city: String(req.query.city),
+    };
+    const result = await ApiStoresService.getFilialList(dto);
     res.json(result);
   }
 

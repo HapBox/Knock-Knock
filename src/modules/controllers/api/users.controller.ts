@@ -56,7 +56,7 @@ class Controller {
     responses: [SwaggerUtils.body200(APIAddressesModels.resAddressInfo)],
   })
   async createAddress(req: BaseRequest, res: Response, next: NextFunction) {
-    const dto = {
+    const dto: AddressCreateDto = {
       ...req.body,
       userId: req.userId,
     };

@@ -2,6 +2,8 @@ import { IsString, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class AddressCreateDto extends BaseDto {
+  userId?: string;
+
   @IsNotEmpty()
   @IsString()
   city!: string;

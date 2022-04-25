@@ -1,8 +1,8 @@
-import { IsString, IsInt, IsNotEmpty } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { BaseDto } from '../base/base.dto';
 
 export class AddressUpdateDto extends BaseDto {
-  userId!: string; //если пользователь хочет изменить свой адрес
+  userId!: string; 
   addressId!: string;
 
   @IsNotEmpty()
@@ -17,15 +17,19 @@ export class AddressUpdateDto extends BaseDto {
   @IsString()
   house!: string;
 
+  @IsOptional()
   @IsInt()
   entrance!: number;
 
+  @IsOptional()
   @IsInt()
   floor!: number;
 
+  @IsOptional()
   @IsInt()
   apartment!: number;
 
+  @IsOptional()
   @IsString()
   intercom!: string;
 }
