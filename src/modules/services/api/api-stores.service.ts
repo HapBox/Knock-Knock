@@ -15,24 +15,42 @@ export default class ApiStoresService {
     let stores;
     if (query.category) {
       stores = await Store.findAll({
+        attributes: ['id', 'name', 'phone'],
         include: [
           {
             model: Product,
             duplicating: false,
+            attributes: ['id'],
             where: {
               categoryId: query.category,
             },
-            limit: 1,
             required: true,
           },
           {
             model: FileDB,
             duplicating: false,
           },
+          {
+            model: Filial,
+            duplicating: false,
+            attributes: ['id'],
+            include: [
+              {
+                model: Address,
+                attributes: ['id'],
+                where: {
+                  city: query.city,
+                },
+                required: true
+              },
+            ],
+            required: true
+          },
         ],
       });
     } else if (query.searchValue) {
       stores = await Store.findAll({
+        attributes: ['id', 'name', 'phone'],
         where: {
           name: {
             [Op.iLike]: '%' + query.searchValue + '%',
@@ -42,14 +60,45 @@ export default class ApiStoresService {
           {
             model: Filial,
             duplicating: false,
+            attributes: ['id'],
             include: [
               {
                 model: Address,
+                attributes: ['id'],
                 where: {
                   city: query.city,
                 },
+                required: true
               },
             ],
+            limit: 1,
+            required: true
+          },
+          {
+            model: FileDB,
+            duplicating: false,
+          },
+        ],
+      });
+    } else {
+      stores = await Store.findAll({
+        attributes: ['id', 'name', 'phone'],
+        include: [
+          {
+            model: Filial,
+            limit: 1,
+            attributes: ['id'],
+            include: [
+              {
+                model: Address,
+                attributes: ['id'],
+                where: {
+                  city: query.city,
+                },
+                required: true
+              },
+            ],
+            required: true
           },
           {
             model: FileDB,
