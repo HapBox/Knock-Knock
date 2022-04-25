@@ -18,7 +18,8 @@ export default class APIOrderModels {
     userAddress: APIAddressesModels.reqAddressCreate,
     payment: Object.values(PaymentTypes),
     'cardId?': 'UUID',
-    dateTo: '27.02.2022',
+    'dateTo?': '27.02.2022',
+    price: 1500,
     countPersons: 4,
     productList: [APIOrderModels.reqProductOrderCreate],
   };

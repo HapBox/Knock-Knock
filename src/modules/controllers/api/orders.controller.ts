@@ -27,7 +27,6 @@ class Controller {
     res.json(result);
   }
 
-  //скорее всего впихнуть в стор
   @POST('/', {
     summary: 'Создание нового заказа',
     handlers: [requireToken, dtoValidator(OrderCreateDto)],

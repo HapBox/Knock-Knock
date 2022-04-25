@@ -1,7 +1,9 @@
 import Filial from '../../../database/models/final/filial.model';
 import Order from '../../../database/models/final/order.model';
+import Product from '../../../database/models/final/product.model';
 import Rating from '../../../database/models/final/rating.model';
 import Store from '../../../database/models/final/store.model';
+import OrderProduct from '../../../database/models/relations/order-product.model';
 import { StatusTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
 import { OrderCancelDto } from '../../dto/order-cancel.dto';
@@ -16,12 +18,24 @@ export default class ApiOrdersService {
       where: {
         userId: userId,
       },
+      include: {
+        model: Product,
+        through: {
+          attributes: ['count'],
+        },
+      },
     });
     return { orderList: orderList };
   }
 
   static async createOrder(dto: OrderCreateDto) {
     const order = await Order.create({ ...dto });
+    for (let el of dto.productList) {
+      await OrderProduct.create({
+        ...el,
+        orderId: order.id,
+      });
+    }
     return order;
   }
 
