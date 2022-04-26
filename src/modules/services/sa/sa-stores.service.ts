@@ -1,4 +1,3 @@
-import { emitKeypressEvents } from 'readline';
 import Address from '../../../database/models/final/address.model';
 import Category from '../../../database/models/final/category.model';
 import FileDB from '../../../database/models/final/file-db.model';

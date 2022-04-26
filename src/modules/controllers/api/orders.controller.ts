@@ -56,7 +56,7 @@ class Controller {
     res.json(result);
   }
 
-  @PATCH('/:orderId/addresses/:addressId', {
+  @PATCH('/:id/address/', {
     summary: 'Изменение адреса в доставке',
     handlers: [requireToken, dtoValidator(OrderAddressUpdateDto)],
     body: APIAddressesModels.reqAddressCreate,
@@ -64,9 +64,9 @@ class Controller {
   })
   async changeOrderAddress(req: BaseRequest, res: Response, next: NextFunction) {
     const dto: OrderAddressUpdateDto = {
-      orderId: req.params.orderId,
+      userAddress: req.body.userAddress,
+      orderId: req.params.id,
       userId: req.userId,
-      addressId: req.params.addressId,
     };
     const result = await ApiOrdersService.changeAddress(dto);
     res.json(result);
@@ -82,7 +82,7 @@ class Controller {
       userId: req.userId,
       orderId: req.params.id,
     };
-    const result = ApiOrdersService.cancelOrder(dto);
+    const result = await ApiOrdersService.cancelOrder(dto);
     res.json(result);
   }
 

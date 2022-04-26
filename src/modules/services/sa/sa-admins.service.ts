@@ -1,4 +1,5 @@
 import User from '../../../database/models/final/user.model';
+import { Op } from 'sequelize';
 import { RoleTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
 import { UserCreateDto } from '../../dto/user-create.dto';
@@ -8,7 +9,7 @@ export default class SaAdminsService {
   static async getAdmins() {
     const adminList = await User.findAll({
       where: {
-        role: RoleTypes.ADMIN,
+        [Op.or]: [{ role: RoleTypes.ADMIN }, { role: RoleTypes.STOREWORKER }],
       },
     });
 
@@ -19,7 +20,7 @@ export default class SaAdminsService {
     const admin = await User.findOne({
       where: {
         id: adminId,
-        role: RoleTypes.ADMIN,
+        [Op.or]: [{ role: RoleTypes.ADMIN }, { role: RoleTypes.STOREWORKER }],
       },
     });
 
@@ -36,7 +37,7 @@ export default class SaAdminsService {
     let admin = await User.findOne({
       where: {
         id: dto.userId,
-        role: RoleTypes.ADMIN,
+        [Op.or]: [{ role: RoleTypes.ADMIN }, { role: RoleTypes.STOREWORKER }],
       },
     });
 
@@ -57,7 +58,7 @@ export default class SaAdminsService {
     let admin = await User.findOne({
       where: {
         id: adminId,
-        role: RoleTypes.ADMIN,
+        [Op.or]: [{ role: RoleTypes.ADMIN }, { role: RoleTypes.STOREWORKER }],
       },
     });
 
@@ -84,7 +85,7 @@ export default class SaAdminsService {
     let admin = await User.findOne({
       where: {
         id: adminId,
-        role: RoleTypes.ADMIN,
+        [Op.or]: [{ role: RoleTypes.ADMIN }, { role: RoleTypes.STOREWORKER }],
       },
     });
 
@@ -131,7 +132,7 @@ export default class SaAdminsService {
     let admin = await User.findOne({
       where: {
         id: adminId,
-        role: RoleTypes.ADMIN,
+        [Op.or]: [{ role: RoleTypes.ADMIN }, { role: RoleTypes.STOREWORKER }],
       },
     });
 

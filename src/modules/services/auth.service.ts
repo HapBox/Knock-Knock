@@ -59,6 +59,13 @@ export default class AuthService {
       });
     }
 
+    if (user.isBlocked === true) {
+      throwError({
+        statusCode: 403,
+        message: 'Вы забанены',
+      });
+    }
+
     const token = await Token.create({
       userId: user.id,
       value: nanoid(Constants.TOKEN_LENGHT),
