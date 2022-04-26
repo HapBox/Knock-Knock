@@ -16,6 +16,13 @@ export default class SAStoresModels {
     productList: [SAProductsModels.resProductInfo],
   };
 
+  static resStoreOrderInfo = {
+    id: 'UUID',
+    name: 'Название магазина',
+    phone: '88005553535',
+    image: SAFileModels.resFileDB,
+  };
+
   static resStoreList = {
     id: 'UUID',
     store: 'Название магазина',

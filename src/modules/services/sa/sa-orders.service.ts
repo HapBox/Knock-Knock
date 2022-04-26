@@ -1,11 +1,10 @@
-import { Op } from 'sequelize';
 import Address from '../../../database/models/final/address.model';
-import Category from '../../../database/models/final/category.model';
 import FileDB from '../../../database/models/final/file-db.model';
 import Filial from '../../../database/models/final/filial.model';
 import Order from '../../../database/models/final/order.model';
 import Product from '../../../database/models/final/product.model';
 import Store from '../../../database/models/final/store.model';
+import OrderProduct from '../../../database/models/relations/order-product.model';
 import { StatusTypes } from '../../../utils/constants';
 import { throwError } from '../../../utils/http-exception';
 import { OrderCreateDto } from '../../dto/order-create.dto';
@@ -13,7 +12,27 @@ import { OrderUpdateDto } from '../../dto/order-update.dto';
 
 export default class SaOrdersService {
   static async getOrders() {
-    const orderList = await Order.findAll();
+    const orderList = await Order.findAll({
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
+    });
     return { orderList: orderList };
   }
 
@@ -31,6 +50,25 @@ export default class SaOrdersService {
       where: {
         filialId: filialIdList,
       },
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
     });
 
     return { orderList: orderList };
@@ -41,6 +79,25 @@ export default class SaOrdersService {
       where: {
         filialId,
       },
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
     });
 
     return orderList;
@@ -51,6 +108,25 @@ export default class SaOrdersService {
       where: {
         userId: clientId,
       },
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
     });
 
     return { orderList: orderList };
@@ -58,7 +134,25 @@ export default class SaOrdersService {
 
   static async getOrderById(orderId: string) {
     const order = await Order.findByPk(orderId, {
-      include: [{ model: Address }, { model: Filial}, { model: Product }],
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
     });
 
     if (!order)
@@ -71,7 +165,27 @@ export default class SaOrdersService {
   }
 
   static async updateOrder(dto: OrderUpdateDto) {
-    let order = await Order.findByPk(dto.orderId);
+    let order = await Order.findByPk(dto.orderId, {
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
+    });
 
     if (!order)
       throwError({
@@ -84,7 +198,27 @@ export default class SaOrdersService {
   }
 
   static async prepareOrder(orderId: string) {
-    let order = await Order.findByPk(orderId);
+    let order = await Order.findByPk(orderId, {
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
+    });
 
     if (!order)
       throwError({
@@ -106,7 +240,27 @@ export default class SaOrdersService {
   }
 
   static async cancelOrder(orderId: string) {
-    let order = await Order.findByPk(orderId);
+    let order = await Order.findByPk(orderId, {
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
+    });
 
     if (!order)
       throwError({
@@ -128,7 +282,27 @@ export default class SaOrdersService {
   }
 
   static async deliverOrder(orderId: string) {
-    let order = await Order.findByPk(orderId);
+    let order = await Order.findByPk(orderId, {
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
+    });
 
     if (!order)
       throwError({
@@ -150,7 +324,27 @@ export default class SaOrdersService {
   }
 
   static async readyOrder(orderId: string) {
-    let order = await Order.findByPk(orderId);
+    let order = await Order.findByPk(orderId, {
+      include: [
+        {
+          model: Filial,
+          attributes: ['id'],
+          include: [
+            {
+              model: Store,
+              attributes: ['id', 'name', 'phone'],
+              include: [
+                {
+                  model: FileDB,
+                },
+              ],
+            },
+          ],
+        },
+        { model: Address },
+        { model: Product, attributes: ['id'], through: { attributes: ['count'] } },
+      ],
+    });
 
     if (!order)
       throwError({
@@ -172,9 +366,21 @@ export default class SaOrdersService {
   }
 
   static async createPhoneOrder(dto: OrderCreateDto) {
+    const address = await Address.create({ ...dto.userAddress });
     const order = await Order.create({
       ...dto,
+      userAddressId: address.id,
     });
+    let productList = [];
+    for (let i = 0; i < dto.productList.length; i++) {
+      let product = await OrderProduct.create({
+        orderId: order.id,
+        productId: dto.productList[i].productId,
+        count: dto.productList[i].count,
+      });
+      productList.push(product);
+    }
+
     return order;
   }
 }

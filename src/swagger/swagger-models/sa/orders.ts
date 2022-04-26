@@ -26,13 +26,23 @@ export default class SAOrderModels {
 
   static resOrderInfo = {
     id: 'UUID',
-    store: SAStoresModels.resStoreInfo,
+    filial: {
+      id: 'UUID',
+      store: SAStoresModels.resStoreOrderInfo,
+    },
     price: 'Цена',
     status: 'Статус',
     dateTo: '27.02.2022',
     countPersons: 4,
-    productList: [SAOrderModels.resProductOrderCreate],
-    address: SAAddressesModels.resAddressInfo
+    productList: [
+      {
+        id: 'UUID',
+        OrderProduct: {
+          count: 'Количество',
+        },
+      },
+    ],
+    address: SAAddressesModels.resAddressInfo,
   };
 
   static resOrdersInfo = {
